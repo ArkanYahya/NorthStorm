@@ -1,0 +1,96 @@
+﻿@model IEnumerable<NorthStorm.Models.Employee>
+
+@{
+    ViewData["Title"] = "الموظفين";
+}
+
+<h1>قائمة الموظفين</h1>
+<hr />
+
+<p dir="ltr">
+    <a asp-action="Create">موظف جديد</a>
+</p>
+
+<div class="card bg-light mb-3">
+    <div class="card-header">الموظفين</div>
+    <table class="table card-body">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MotherName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BirthDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.religion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.race)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nationality)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MotherName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BirthDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.gender.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.religion.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.race.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nationality.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.status.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">تعديل</a> |
+                        <!--
+                        <a asp-action="Details" asp-route-id="@item.Id">تفاصيل</a> |
+
+                        -->
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">حذف</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <br />
+
+    </div>
+</div>

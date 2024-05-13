@@ -1,0 +1,59 @@
+﻿@model IEnumerable<NorthStorm.Models.Recruitment>
+
+@{
+    ViewData["Title"] = "التعيينات - الأوامر الإدارية";
+}
+
+<h1>التعيينات - الأوامر الإدارية</h1>
+<hr />
+
+<p dir="ltr">
+    <a asp-action="Create">أمر إداري جديد</a>
+</p>
+
+<div class="card bg-light mb-3">
+    <div class="card-header">الأوامر الإدارية</div>
+    <table class="table card-body">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReferenceNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReferenceDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">تعديل</a> |
+                        <!--
+                        <a asp-action="Details" asp-route-id="@item.Id">تفاصيل</a> |
+                        -->
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">حذف</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <br/>
+
+    </div>
+</div>

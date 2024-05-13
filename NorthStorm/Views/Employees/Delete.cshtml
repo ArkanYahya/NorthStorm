@@ -1,0 +1,143 @@
+﻿@model NorthStorm.Models.Employee
+
+@{
+    ViewData["Title"] = "حذف موظف";
+}
+
+<h1>حذف موظف</h1>
+
+<hr />
+<p dir="ltr">
+    <هل class="text-danger">هل أنت متأكد من أنك تريد حذف موظف؟</h4>
+</p>
+
+<div class="card bg-light mb-3">
+    <div class="card-header">المعلومات الرئيسية</div>
+    <div class="card-body">
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.Id)
+                </div>
+                <div class="form-control  h-75">
+                    @Html.DisplayFor(model => model.Id)
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.FullName)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.FullName)
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.MotherName)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.MotherName)
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+            </div>
+
+            <div class="form-group col-md-2">
+            </div>
+
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.BirthDate)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.BirthDate)
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.gender)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.gender.Name)
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.religion)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.religion.Name)
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.race)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.race.Name)
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.nationality)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.nationality.Name)
+                </div>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.CivilNumber)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.CivilNumber)
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.IBAN)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.IBAN)
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.status)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.status.Name)
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+            </div>
+            <form asp-action="Delete" class="form-group col-md-2 align-self-end text-md-center">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="حذف" class="btn btn-danger w-75" />
+            </form>
+        </div>
+
+
+    </div>
+    <div class="card-footer">
+        <br />
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">العودة إلى القائمة</a>
+</div>

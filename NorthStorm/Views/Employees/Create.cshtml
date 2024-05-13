@@ -1,0 +1,144 @@
+﻿@model NorthStorm.Models.Employee
+
+@{
+    ViewData["Title"] = "الموظفين";
+}
+
+<h1>إضافة موظف</h1>
+
+<h4></h4>
+<hr />
+<p dir="ltr">
+    <br />
+</p>
+<div class="card bg-light mb-3">
+    <div class="card-header">المعلومات الرئيسية</div>
+    <form asp-action="Create" class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="FourthName" class="control-label"></label>
+                <input asp-for="FourthName" class="form-control" />
+                <span asp-validation-for="FourthName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="SurName" class="control-label"></label>
+                <input asp-for="SurName" class="form-control" />
+                <span asp-validation-for="SurName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="MotherFirstName" class="control-label"></label>
+                <input asp-for="MotherFirstName" class="form-control" />
+                <span asp-validation-for="MotherFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="MotherMiddleName" class="control-label"></label>
+                <input asp-for="MotherMiddleName" class="form-control" />
+                <span asp-validation-for="MotherMiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="MotherLastName" class="control-label"></label>
+                <input asp-for="MotherLastName" class="form-control" />
+                <span asp-validation-for="MotherLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <input asp-for="BirthDate" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="gender" class="control-label"></label>
+                <select asp-for="GenderId" class="form-control" asp-items="ViewBag.GenderId">
+                    <option value="">-- إختر الجنس --</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="religion" class="control-label"></label>
+                <select asp-for="ReligionId" class="form-control" asp-items="ViewBag.ReligionId">
+                    <option value="">-- إختر الديانة --</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="race" class="control-label"></label>
+                <select asp-for="RaceId" class="form-control" asp-items="ViewBag.RaceId">
+                    <option value="">-- إختر القومية --</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="nationality" class="control-label"></label>
+                <select asp-for="NationalityId" class="form-control" asp-items="ViewBag.NationalityId">
+                    <option value="">-- إختر الجنسية --</option>
+                </select>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="CivilNumber" class="control-label"></label>
+                <input asp-for="CivilNumber" class="form-control" />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="IBAN" class="control-label"></label>
+                <input asp-for="IBAN" class="form-control" />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="status" class="control-label"></label>
+                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId">
+                    <option value="">-- إختر الحالة --</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2 align-self-end text-md-end">
+                <input type="submit" value="حفظ" class="btn btn-primary w-100" />
+            </div>
+        </div>
+    </form>
+    <div class="card-footer">
+        <br />
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
