@@ -164,7 +164,7 @@ namespace NorthStorm.Controllers
             {
                 return NotFound();
             }
-            
+
             var employee = await _context.Employees
                 .Include(e => e.gender)
                 .Include(e => e.nationality)
@@ -190,10 +190,12 @@ namespace NorthStorm.Controllers
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return NotFound();
+
         }
 
         private bool EmployeeExists(int id)

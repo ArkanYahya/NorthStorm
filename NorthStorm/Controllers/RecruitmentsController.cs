@@ -138,10 +138,10 @@ namespace NorthStorm.Controllers
             if (recruitment != null)
             {
                 _context.Recruitments.Remove(recruitment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
 
         private bool RecruitmentExists(int id)

@@ -156,10 +156,12 @@ namespace NorthStorm.Controllers
             if (employeeRecruitment != null)
             {
                 _context.EmployeeRecruitments.Remove(employeeRecruitment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return NotFound();
+
         }
 
         private bool EmployeeRecruitmentExists(int id)
