@@ -1,37 +1,77 @@
 ﻿@model IEnumerable<NorthStorm.Models.Recruitment>
 
+@using NorthStorm.Models.ViewModels;
+
 @{
     ViewData["Title"] = "التعيينات - الأوامر الإدارية";
+    SortModel sortModel = (SortModel)ViewData["sortModel"];
+    PagerModel pager = ViewBag.Pager;
 }
 
-<h1>التعيينات - الأوامر الإدارية</h1>
+
+<h3>@ViewData["Title"]</h3>
 <hr />
 
-<p dir="ltr">
-    <a asp-action="Create">أمر إداري جديد</a>
+<p>
+    <a asp-action="Create" class="d-flex justify-content-end h5">
+        أمر إداري جديد
+    </a>
 </p>
 
 <div class="card bg-light mb-3">
-    <div class="card-header">الأوامر الإدارية</div>
+    <div class="card-header">
+        <partial name="_topBar" model="@pager" />
+    </div>
     <table class="table card-body">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ReferenceNo)
+                    <i class="@sortModel.GetColumn("ReferenceNo").SortIcon" arial-hidden="true"></i>
+                    <a asp-action="Index"
+                       asp-route-sortExpression="@sortModel.GetColumn("ReferenceNo").SortExpression"
+                       asp-route-pg="@pager.CurrentPage"
+                       asp-route-pageSize="@pager.PageSize"
+                       asp-route-SearchText="@ViewData["SearchText"]">
+                        @Html.DisplayNameFor(model => model.ReferenceNo)
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ReferenceDate)
+                    <i class="@sortModel.GetColumn("ReferenceDate").SortIcon" arial-hidden="true"></i>
+                    <a asp-action="Index" 
+                    asp-route-sortExpression="@sortModel.GetColumn("ReferenceDate").SortExpression"
+                       asp-route-pg="@pager.CurrentPage"
+                       asp-route-pageSize="@pager.PageSize"
+                       asp-route-SearchText="@ViewData["SearchText"]">
+                        @Html.DisplayNameFor(model => model.ReferenceDate)
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Subject)
+                    <i class="@sortModel.GetColumn("Subject").SortIcon" arial-hidden="true"></i>
+                    <a asp-action="Index" 
+                    asp-route-sortExpression="@sortModel.GetColumn("Subject").SortExpression"
+                       asp-route-pg="@pager.CurrentPage"
+                       asp-route-pageSize="@pager.PageSize"
+                       asp-route-SearchText="@ViewData["SearchText"]">
+                        @Html.DisplayNameFor(model => model.Subject)
+                    </a>
                 </th>
-                <th></th>
+                <th>
+                    عدد الموظفين في الأمر
+                </th>
+                <th>
+
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                string selectedRow = "";
+                if (item.Id == (int?)ViewData["RecruitmentId"])
+                {
+                    selectedRow = "table-success";
+                }
+                <tr class="@selectedRow">
                     <td>
                         @Html.DisplayFor(modelItem => item.ReferenceNo)
                     </td>
@@ -42,18 +82,125 @@
                         @Html.DisplayFor(modelItem => item.Subject)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">تعديل</a> |
-                        <!--
-                        <a asp-action="Details" asp-route-id="@item.Id">تفاصيل</a> |
-                        -->
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">حذف</a>
+                        @Html.DisplayFor(modelItem => item.Employees.Count)
+                    </td>
+                    <td>
+                        <div class="btn-group">
+
+                            <a asp-action="Index"
+                               asp-route-selectedId="@item.Id"
+                               asp-route-pg="@pager.CurrentPage"
+                               asp-route-pageSize="@pager.PageSize"
+                               asp-route-SearchText="@ViewData["SearchText"]"
+                               asp-route-sortExpression="@sortModel.SortedExpression">
+
+                                <span class="btn btn-sm btn-outline-dark">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </span>
+                            </a> |
+                            @*<a asp-action="Edit" asp-route-id="@item.Id">تعديل</a>*@
+                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                <span class="btn btn-sm btn-outline-primary">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                            <!--
+                            <a asp-action="Details" asp-route-id="@item.Id">تفاصيل</a> |
+                            -->
+                            @if (item.Employees.Count == 0)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">
+                                    <span class="btn btn-sm btn-outline-danger">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </span>
+                                </a>
+                            }
+                        </div>
+
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <div class="card-footer">
-        <br/>
-
+    <div class="card-footer" style="height:50px">
+        <partial name="_bottomBar" model="@pager" />
     </div>
 </div>
+
+
+@{
+    int? x = (int?)ViewData["RecruitmentId"];
+
+    @if (x != null)
+    {
+        int index;
+        index = (int)ViewData["RecruitmentId"];
+        if (Model.Single(x => x.Id == index).Employees != null)
+        {
+            if (Model.Single(x => x.Id == index).Employees.Count > 0)
+            {
+                <div class="card bg-light mb-3">
+                    <div class="card-header">التفاصيل</div>
+                    <table class="table card-body">
+                        <thead>
+                            <tr>
+                                <th>ت</th>
+                                <th>رقم الموظف</th>
+                                <th>الاسم الكامل</th>
+                                <th>إسم الأم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (var item in Model.Single(x => x.Id == index).Employees)
+                            {
+                                ++i;
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.FullName
+                                    </td>
+                                    <td>
+                                        @item.MotherName
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                    <div class="card-footer">
+                        <br />
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card bg-light mb-3">
+                    <div class="card-header">التفاصيل</div>
+                    <table class="table card-body">
+                        <div class="d-flex justify-content-center text-danger">
+                            <br />
+                            <span>
+                                <br />
+                                لا يوجد تفاصيل
+                            </span>
+                        </div>
+                    </table>
+                    <div class="card-footer">
+                        <br />
+                    </div>
+                </div>
+
+            }
+        }
+    }
+
+}

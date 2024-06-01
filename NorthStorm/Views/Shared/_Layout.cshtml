@@ -7,34 +7,197 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NorthStorm.styles.css" asp-append-version="true" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">North Storm</a>
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid h6">
+                <a class="navbar-brand text-black" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/Images/noc.jpg" class="rounded-circle" width="32" height="32" alt="Avatar" />
+                    North Storm
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between dropstart">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Recruitments" asp-action="Index">التعيينات</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                قسم شؤون الموظفين
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة التعيينات
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Recruitments" asp-action="Index">وحدة التعيينات</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة الترقيات
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Employees" asp-action="Index">الموظفين</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة العلاوات
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة احصائيات القوى العاملة
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة التقاعد
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EmployeeRecruitments" asp-action="Index">تعيينات الموظفين</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                قسم التطوير
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة التدريب والتطوير
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة الايفادات
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">الموظفين</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                قسم العلاقات العامة
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة الاعلام
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة التوثيق</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الخط والتصوير</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الموقع الالكتروني</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة المطبعة
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة الأرشفة</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة الموفدين
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة الحجوزات</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="test nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                قسم الخدمات الادارية
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة دور الضيافة
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة مركز بابا الثقافي</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة مركز عرفة الثقافي</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة دار استراحة بابا</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة التغذية
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">وحدة مطعم ك1</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة دار عزاب بابا</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة دار عزاب ك1</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                        شعبة الاسكان
+                                    </a>
+                                    <ul class="dropdown-menu text-black">
+                                        <li><a class="nav-link text-black" href="#">وحدة اسكان بابا</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة اسكان عرفة</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة اسكان الزاب</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="nav-link text-black" href="#">و. مخزن الأرزاق المركزي</a></li>
+                            </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+
     </header>
-    <div class="container">
+
+    <div class="container" style="margin-top:80px">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

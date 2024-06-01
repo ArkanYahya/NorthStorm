@@ -4,11 +4,13 @@
     ViewData["Title"] = "حذف موظف";
 }
 
-<h1>حذف موظف</h1>
-
+<h3>@ViewData["Title"]</h3>
 <hr />
-<p dir="ltr">
-    <هل class="text-danger">هل أنت متأكد من أنك تريد حذف موظف؟</h4>
+
+<p>
+    <span class="text-danger h4">
+        هل أنت متأكد من أنك تريد حذف موظف؟
+    </span>
 </p>
 
 <div class="card bg-light mb-3">
@@ -19,7 +21,7 @@
                 <div class="control-label">
                     @Html.DisplayNameFor(model => model.Id)
                 </div>
-                <div class="form-control  h-75">
+                <div class="form-control">
                     @Html.DisplayFor(model => model.Id)
                 </div>
             </div>

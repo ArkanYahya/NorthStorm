@@ -2,13 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
 using Microsoft.Extensions.DependencyInjection;
+using NorthStorm.Interfaces;
+using NorthStorm.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NorthStormContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NorthStormContext") ?? throw new InvalidOperationException("Connection string 'NorthStormContext' not found.")));
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'NorthStormContext' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -18,6 +20,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddScoped<IRecruitment, RecruitmentRepo>();
+builder.Services.AddScoped<IEmployee, EmployeeRepo>();
 
 // اضافة
 // The AddDatabaseDeveloperPageExceptionFilter
@@ -54,7 +60,7 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<NorthStormContext>();
     // I used Migrate instead of EnsureCreated to ensure future maigrate update
-    context.Database.Migrate(); //.EnsureCreated();
+    context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }
 

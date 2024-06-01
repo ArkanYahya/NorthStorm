@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace NorthStorm.Data.MainMigrations
+namespace NorthStorm.Migrations
 {
     /// <inheritdoc />
-    public partial class intialCreate : Migration
+    public partial class intial2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Gender",
+                name: "Genders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,11 +21,11 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gender", x => x.Id);
+                    table.PrimaryKey("PK_Genders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Nationality",
+                name: "Nationalities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,11 +34,11 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nationality", x => x.Id);
+                    table.PrimaryKey("PK_Nationalities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Race",
+                name: "Races",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -47,11 +47,11 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Race", x => x.Id);
+                    table.PrimaryKey("PK_Races", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Religion",
+                name: "Religiones",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -60,7 +60,7 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Religion", x => x.Id);
+                    table.PrimaryKey("PK_Religiones", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +77,7 @@ namespace NorthStorm.Data.MainMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Status",
+                name: "Statuses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -86,11 +86,11 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Status", x => x.Id);
+                    table.PrimaryKey("PK_Statuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Recruitment",
+                name: "Recruitments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -102,16 +102,16 @@ namespace NorthStorm.Data.MainMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Recruitment", x => x.Id);
+                    table.PrimaryKey("PK_Recruitments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recruitment_State_StateId",
+                        name: "FK_Recruitments_State_StateId",
                         column: x => x.StateId,
                         principalTable: "State",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employee",
+                name: "Employees",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -131,47 +131,46 @@ namespace NorthStorm.Data.MainMigrations
                     RaceId = table.Column<int>(type: "int", nullable: false),
                     NationalityId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employee", x => x.Id);
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employee_Gender_GenderId",
+                        name: "FK_Employees_Genders_GenderId",
                         column: x => x.GenderId,
-                        principalTable: "Gender",
+                        principalTable: "Genders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employee_Nationality_NationalityId",
+                        name: "FK_Employees_Nationalities_NationalityId",
                         column: x => x.NationalityId,
-                        principalTable: "Nationality",
+                        principalTable: "Nationalities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employee_Race_RaceId",
+                        name: "FK_Employees_Races_RaceId",
                         column: x => x.RaceId,
-                        principalTable: "Race",
+                        principalTable: "Races",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employee_Religion_ReligionId",
+                        name: "FK_Employees_Religiones_ReligionId",
                         column: x => x.ReligionId,
-                        principalTable: "Religion",
+                        principalTable: "Religiones",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employee_State_StateId",
+                        name: "FK_Employees_State_StateId",
                         column: x => x.StateId,
                         principalTable: "State",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Employee_Status_StatusId",
+                        name: "FK_Employees_Statuses_StatusId",
                         column: x => x.StatusId,
-                        principalTable: "Status",
+                        principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -180,82 +179,64 @@ namespace NorthStorm.Data.MainMigrations
                 name: "EmployeeRecruitment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    RecruitmentId = table.Column<int>(type: "int", nullable: false),
-                    StateId = table.Column<int>(type: "int", nullable: true)
+                    EmployeesId = table.Column<int>(type: "int", nullable: false),
+                    RecruitmentsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeRecruitment", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeRecruitment", x => new { x.EmployeesId, x.RecruitmentsId });
                     table.ForeignKey(
-                        name: "FK_EmployeeRecruitment_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employee",
+                        name: "FK_EmployeeRecruitment_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EmployeeRecruitment_Recruitment_RecruitmentId",
-                        column: x => x.RecruitmentId,
-                        principalTable: "Recruitment",
+                        name: "FK_EmployeeRecruitment_Recruitments_RecruitmentsId",
+                        column: x => x.RecruitmentsId,
+                        principalTable: "Recruitments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmployeeRecruitment_State_StateId",
-                        column: x => x.StateId,
-                        principalTable: "State",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_GenderId",
-                table: "Employee",
+                name: "IX_EmployeeRecruitment_RecruitmentsId",
+                table: "EmployeeRecruitment",
+                column: "RecruitmentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_GenderId",
+                table: "Employees",
                 column: "GenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_NationalityId",
-                table: "Employee",
+                name: "IX_Employees_NationalityId",
+                table: "Employees",
                 column: "NationalityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_RaceId",
-                table: "Employee",
+                name: "IX_Employees_RaceId",
+                table: "Employees",
                 column: "RaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_ReligionId",
-                table: "Employee",
+                name: "IX_Employees_ReligionId",
+                table: "Employees",
                 column: "ReligionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_StateId",
-                table: "Employee",
+                name: "IX_Employees_StateId",
+                table: "Employees",
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_StatusId",
-                table: "Employee",
+                name: "IX_Employees_StatusId",
+                table: "Employees",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeRecruitment_EmployeeId",
-                table: "EmployeeRecruitment",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeRecruitment_RecruitmentId",
-                table: "EmployeeRecruitment",
-                column: "RecruitmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeRecruitment_StateId",
-                table: "EmployeeRecruitment",
-                column: "StateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recruitment_StateId",
-                table: "Recruitment",
+                name: "IX_Recruitments_StateId",
+                table: "Recruitments",
                 column: "StateId");
         }
 
@@ -266,25 +247,25 @@ namespace NorthStorm.Data.MainMigrations
                 name: "EmployeeRecruitment");
 
             migrationBuilder.DropTable(
-                name: "Employee");
+                name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "Recruitment");
+                name: "Recruitments");
 
             migrationBuilder.DropTable(
-                name: "Gender");
+                name: "Genders");
 
             migrationBuilder.DropTable(
-                name: "Nationality");
+                name: "Nationalities");
 
             migrationBuilder.DropTable(
-                name: "Race");
+                name: "Races");
 
             migrationBuilder.DropTable(
-                name: "Religion");
+                name: "Religiones");
 
             migrationBuilder.DropTable(
-                name: "Status");
+                name: "Statuses");
 
             migrationBuilder.DropTable(
                 name: "State");

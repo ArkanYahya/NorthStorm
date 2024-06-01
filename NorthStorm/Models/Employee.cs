@@ -18,15 +18,15 @@ namespace NorthStorm.Models
 
         // Required يستخدم للحقول المطلوبة ولا يمكن ادخال البيانات دون اعطاء قيمة لها
         // StringLength(50, MinimumLength = 3) تحديد اعلى واقل قيمة يمكن ادخالها في الحقل
-        [Required, Display(Name = "الاسم الاول"), StringLength(50, MinimumLength = 3)]
+        [Required(ErrorMessage ="يرجى ادخال الاسم الأول"), Display(Name = "الاسم الاول")]
         public string FirstName { get; set; }
 
 
-        [Required, Display(Name = "الاسم الثاني")]
+        [Required(ErrorMessage = "يرجى ادخال الاسم الثاني"), Display(Name = "الاسم الثاني")]
         public string MiddleName { get; set; }
 
 
-        [Required, Display(Name = "الاسم الثالث")]
+        [Required(ErrorMessage = "يرجى ادخال الاسم الثالث"), Display(Name = "الاسم الثالث")]
         public string LastName { get; set; }
 
 
@@ -150,7 +150,7 @@ namespace NorthStorm.Models
         // خاصية التنقل أدناه تثمل علاقة نوع
         // One-To-Many
         // فكل موظف مرتبط بأمر إداري خاص بالتعيين واحد أو أكثر
-        public ICollection<EmployeeRecruitment>? EmployeeRecruitments { get; set; }
+        public List<Recruitment>? Recruitments{ get; set; } = new List<Recruitment> ();
 
 
         // خاصية التنقل الخاصة بالجنس وتمثل علاقة
@@ -179,5 +179,9 @@ namespace NorthStorm.Models
 
         #endregion
 
+        #region Not Mapped
+        [NotMapped]
+        public bool IsDeleted { get; set; } = false;
+        #endregion
     }
 }

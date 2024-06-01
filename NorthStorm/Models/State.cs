@@ -14,7 +14,7 @@ namespace NorthStorm.Models
         #region Navigation Properties
         public ICollection<Employee> Employees { get; set; }
         public ICollection<Recruitment> Recruitments { get; set;}
-        public ICollection<EmployeeRecruitment> employeeRecruitments { get; set; }
+        //public ICollection<EmployeeRecruitment> employeeRecruitments { get; set; }
 
         #endregion
     }

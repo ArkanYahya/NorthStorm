@@ -21,4 +21,16 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Photos\1000.jpg" />
+    <None Include="wwwroot\Photos\2000.jpg" />
+    <None Include="wwwroot\Photos\3000.jpg" />
+    <None Include="wwwroot\Photos\4000.jpg" />
+    <None Include="wwwroot\Photos\5000.jpg" />
+    <None Include="wwwroot\Photos\6000.jpg" />
+    <None Include="wwwroot\Photos\7000.jpg" />
+    <None Include="wwwroot\Photos\8000.jpg" />
+    <None Include="wwwroot\Photos\9000.jpg" />
+  </ItemGroup>
+
 </Project>

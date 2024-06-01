@@ -11,14 +11,14 @@ namespace NorthStorm.Models
         public string ReferenceNo { get; set; }
 
         [Required, DataType(DataType.Date), Display(Name = "التاريخ")]
-        public DateTime ReferenceDate { get; set; }
+        public DateTime ReferenceDate { get; set; } = DateTime.Now.Date;
 
         [Required, Display(Name = " الموضوع / رقم الأمر الإداري")]
         public string Subject { get; set; }
         #endregion
 
         #region Navigation Properties
-        public ICollection<EmployeeRecruitment> EmployeeRecruitments { get; set; }
+        public List<Employee> Employees{ get; set; } = new List<Employee>();
         #endregion
     }
 }

@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NorthStorm.Data;
 
 #nullable disable
 
-namespace NorthStorm.Data.MainMigrations
+namespace NorthStorm.Migrations
 {
     [DbContext(typeof(NorthStormContext))]
-    [Migration("20240512224542_AddEmp2")]
-    partial class AddEmp2
+    partial class NorthStormContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +21,21 @@ namespace NorthStorm.Data.MainMigrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EmployeeRecruitment", b =>
+                {
+                    b.Property<int>("EmployeesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecruitmentsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeesId", "RecruitmentsId");
+
+                    b.HasIndex("RecruitmentsId");
+
+                    b.ToTable("EmployeeRecruitment");
+                });
 
             modelBuilder.Entity("NorthStorm.Models.Employee", b =>
                 {
@@ -58,9 +70,7 @@ namespace NorthStorm.Data.MainMigrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
@@ -93,11 +103,6 @@ namespace NorthStorm.Data.MainMigrations
                     b.Property<string>("SurName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GenderId");
@@ -112,40 +117,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Employee", (string)null);
-                });
-
-            modelBuilder.Entity("NorthStorm.Models.EmployeeRecruitment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecruitmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StateId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("emp2Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("RecruitmentId");
-
-                    b.HasIndex("StateId");
-
-                    b.HasIndex("emp2Id");
-
-                    b.ToTable("EmployeeRecruitment", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Gender", b =>
@@ -162,7 +134,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gender", (string)null);
+                    b.ToTable("Genders");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Nationality", b =>
@@ -179,7 +151,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nationality", (string)null);
+                    b.ToTable("Nationalities");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Race", b =>
@@ -196,7 +168,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Race", (string)null);
+                    b.ToTable("Races");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Recruitment", b =>
@@ -225,7 +197,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Recruitment", (string)null);
+                    b.ToTable("Recruitments");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Religion", b =>
@@ -242,7 +214,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Religion", (string)null);
+                    b.ToTable("Religiones");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.State", b =>
@@ -259,7 +231,7 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("State", (string)null);
+                    b.ToTable("State");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Status", b =>
@@ -275,30 +247,22 @@ namespace NorthStorm.Data.MainMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status", (string)null);
+                    b.ToTable("Statuses");
                 });
 
-            modelBuilder.Entity("NorthStorm.Models.emp2", b =>
+            modelBuilder.Entity("EmployeeRecruitment", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasOne("NorthStorm.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("GenderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
-
-                    b.ToTable("emp2");
+                    b.HasOne("NorthStorm.Models.Recruitment", null)
+                        .WithMany()
+                        .HasForeignKey("RecruitmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Employee", b =>
@@ -350,54 +314,11 @@ namespace NorthStorm.Data.MainMigrations
                     b.Navigation("status");
                 });
 
-            modelBuilder.Entity("NorthStorm.Models.EmployeeRecruitment", b =>
-                {
-                    b.HasOne("NorthStorm.Models.Employee", "Employee")
-                        .WithMany("EmployeeRecruitments")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NorthStorm.Models.Recruitment", "Recruitment")
-                        .WithMany("EmployeeRecruitments")
-                        .HasForeignKey("RecruitmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NorthStorm.Models.State", null)
-                        .WithMany("employeeRecruitments")
-                        .HasForeignKey("StateId");
-
-                    b.HasOne("NorthStorm.Models.emp2", null)
-                        .WithMany("EmployeeRecruitments")
-                        .HasForeignKey("emp2Id");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Recruitment");
-                });
-
             modelBuilder.Entity("NorthStorm.Models.Recruitment", b =>
                 {
                     b.HasOne("NorthStorm.Models.State", null)
                         .WithMany("Recruitments")
                         .HasForeignKey("StateId");
-                });
-
-            modelBuilder.Entity("NorthStorm.Models.emp2", b =>
-                {
-                    b.HasOne("NorthStorm.Models.Gender", "gender")
-                        .WithMany()
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("gender");
-                });
-
-            modelBuilder.Entity("NorthStorm.Models.Employee", b =>
-                {
-                    b.Navigation("EmployeeRecruitments");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Gender", b =>
@@ -415,11 +336,6 @@ namespace NorthStorm.Data.MainMigrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("NorthStorm.Models.Recruitment", b =>
-                {
-                    b.Navigation("EmployeeRecruitments");
-                });
-
             modelBuilder.Entity("NorthStorm.Models.Religion", b =>
                 {
                     b.Navigation("Employees");
@@ -430,18 +346,11 @@ namespace NorthStorm.Data.MainMigrations
                     b.Navigation("Employees");
 
                     b.Navigation("Recruitments");
-
-                    b.Navigation("employeeRecruitments");
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Status", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("NorthStorm.Models.emp2", b =>
-                {
-                    b.Navigation("EmployeeRecruitments");
                 });
 #pragma warning restore 612, 618
         }

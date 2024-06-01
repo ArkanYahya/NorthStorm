@@ -1,0 +1,160 @@
+﻿@model NorthStorm.ViewModels.RecruitmentsVM
+
+@{
+    ViewData["Title"] = "أمر إداري جديد";
+}
+
+<h1>التعيينات - أمر إداري جديد</h1>
+
+<hr />
+
+
+<div class="card bg-light mb-3">
+    <div class="card-header">بيانات الأمر الإداري</div>
+    <form id="CodeSbyAnizForm" asp-action="Create" class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row col-md-12">
+            <div class="form-group col-md-4">
+                <label asp-for="Recruitments.First().ReferenceNo" class="control-label"></label>
+                <input asp-for="Recruitments.First().ReferenceNo" class="form-control" />
+                <span asp-validation-for="Recruitments.First().ReferenceNo" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Recruitments.First().ReferenceDate" class="control-label"></label>
+                <input asp-for="Recruitments.First().ReferenceDate" class="form-control" />
+                <span asp-validation-for="Recruitments.First().ReferenceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Recruitments.First().Subject" class="control-label"></label>
+                <input asp-for="Recruitments.First().Subject" class="form-control" />
+                <span asp-validation-for="Recruitments.First().Subject" class="text-danger"></span>
+            </div>
+            @*             <div class="form-group col-md-2 align-self-end text-md-center">
+            <input type="submit" value="حفظ" class="btn btn-primary w-75" />
+            </div> *@
+        </div>
+
+        <table id="CodesTable" class="table table-borderless table-sm mb-0 pb-0 border CodesTable">
+            <thead>
+                <tr>
+                    <th>رقم الشركة</th>
+                    <th>الاسم الأول</th>
+                    <th>الاسم الثاني</th>
+                    <th>الاسم الثالث</th>
+                    <th>الاسم الرابع</th>
+                    <th>اللقب</th>
+                    <th>اسم الأم الأول</th>
+                    <th style="width:60px;">
+                        <button id='btnAddDetailRow' type="button" class="btn btn-sm btn-secondary visible" onclick="AddItem(this)">
+                            +
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody id="CsDiv">
+                @for (int i = 0; i < Model.Employees.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).Id" class="form-control QtyTotal" />
+                        </td>
+
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).FirstName" class="form-control" />
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).MiddleName" class="form-control" />
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).LastName" class="form-control" />
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).FourthName" class="form-control" />
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).SurName" class="form-control" />
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Employees.ElementAt(i).MotherFirstName" class="form-control" />
+                        </td>
+
+                        <td style="width:60px;">
+                            <button id='btnremove-@i' type="button" class="btn btn-sm btn-danger visible" onclick="DeleteItem(this)">
+                                -
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+        <table class="table table-sm mb-0 pb-0 border">
+            <thead>
+                <tr>
+                    <th style="width:13%;">
+                        المجموع
+                    </th>
+
+                    <th style="width:13%;">
+                        <input type="text" id="txtQtyTotal" class="form-control form-control-plaintext" value="" />
+                    </th>
+
+                    <th style="width:13%;">
+                    </th>
+
+                    <th style="width:13%;">
+                    </th>
+
+                    <th style="width:13%;">
+                    </th>
+
+                    <th style="width:13%;">
+                    </th>
+
+                    <th style="width:13%;">
+                    </th>
+
+                    <th style="width:9%;">
+                    </th>
+                </tr>
+
+            </thead>
+        </table>
+
+
+        <div class="form-group btn-group col-11">
+            <div class="col-1"></div>
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-primary btn-block" />
+            </div>
+            <div class="col-5">
+                <a class="btn btn-secondary btn-block" asp-action="index"
+                   asp-route-pg="@TempData.Peek("CurrentPage")">Back</a>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+
+
+    </form>
+    <div class="card-footer">
+        <br />
+
+    </div>
+
+
+
+
+</div>
+<div>
+    <a asp-action="Index">إلغاء</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

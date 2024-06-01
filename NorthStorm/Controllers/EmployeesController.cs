@@ -2,30 +2,141 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
+using NorthStorm.Interfaces;
 using NorthStorm.Models;
+using NorthStorm.Models.ViewModels;
+using NorthStorm.Repositories;
+using NorthStorm.ViewModels;
 
 namespace NorthStorm.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly NorthStormContext _context;
+        private readonly IEmployee _EmployeeRepo;
 
-        public EmployeesController(NorthStormContext context)
+        public EmployeesController(NorthStormContext context, IEmployee employeeRepo)
         {
             _context = context;
+            _EmployeeRepo = employeeRepo;
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index(string searchString)
+        //{
+        //    if (_context.Employees == null)
+        //    {
+        //        return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+        //    }
+
+        //    var employees = _context.Employees
+        //        .Include(e => e.gender)
+        //        .Include(e => e.nationality)
+        //        .Include(e => e.race)
+        //        .Include(e => e.religion)
+        //        .Include(e => e.status)
+        //        .AsNoTracking();
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        // لانه ليس حقلا في الجدول  FullName للبحث عن الاسم الكامل، ولا يمكن استخدام
+        //        employees = employees.Where(s => 
+        //        s.Id.ToString().Equals(searchString) ||
+        //        s.FirstName.Contains(searchString) || 
+        //        s.MiddleName.Contains(searchString) ||
+        //        s.LastName.Contains(searchString) ||
+        //        s.FourthName.Contains(searchString) ||
+        //        s.SurName.Contains(searchString)
+        //        );
+        //    }
+
+        //    return View(await employees.ToListAsync());
+        //}
+
+        // GET: Employees
+        public IActionResult Index(
+            string sortExpression = "",
+            string SearchText = "",
+            int pg = 1,
+            int pageSize = 5)
         {
-            var employees = _context.Employees
-                .Include(e => e.gender)
-                .Include(e => e.nationality)
-                .Include(e => e.race)
-                .Include(e => e.religion)
-                .Include(e => e.status)
-                .AsNoTracking();
-            return View(await employees.ToListAsync());
+            SortModel sortModel = new SortModel();
+            sortModel.AddColumn("EmployeeId");
+            sortModel.AddColumn("FullName");
+            sortModel.AddColumn("MotherName");
+            sortModel.ApplySort(sortExpression);
+            ViewData["sortModel"] = sortModel;
+            ViewData["pageSize"] = pageSize;
+
+            ViewBag.SearchText = SearchText;
+
+            PaginatedList<Employee> items = _EmployeeRepo.GetItems(sortModel.SortedProperty, sortModel.SortedOrder, SearchText, pg, pageSize);
+
+            var pager = new PagerModel(items.TotalRecords, pg, pageSize);
+
+            pager.SortExpression = sortExpression;
+            this.ViewBag.Pager = pager;
+
+            TempData["CurrentPage"] = pg;
+            return View(items);
+
+            // Use LINQ to get list of state.
+            //IQueryable<string> statusQuery = from m in _context.Employees
+            //                                 orderby m.status.Name
+            //                                 select m.status.Name;
+
+            //var employees = _context.Employees
+            //    .Include(e => e.gender)
+            //    .Include(e => e.nationality)
+            //    .Include(e => e.race)
+            //    .Include(e => e.religion)
+            //    .Include(e => e.status)
+            //    .AsNoTracking();
+
+
+            //if (!string.IsNullOrEmpty(searchString))
+            //{
+            //    employees = employees.Where(s =>
+            //                   s.Id.ToString().Equals(searchString) ||
+            //                   s.FirstName.Contains(searchString) ||
+            //                   s.MiddleName.Contains(searchString) ||
+            //                   s.LastName.Contains(searchString) ||
+            //                   s.FourthName.Contains(searchString) ||
+            //                   s.SurName.Contains(searchString)
+            //                   );
+            //}
+
+            //if (!string.IsNullOrEmpty(employeeStatus))
+            //{
+            //    employees = employees.Where(x => x.status.Name == employeeStatus);
+            //}
+
+            //switch (sortOrder)
+            //{
+            //    case "name_desc":
+            //        employees = employees.OrderByDescending(s => (s.FirstName + " " + s.MiddleName + " " + s.LastName + " " + s.FourthName + " " + s.SurName));
+            //        break;
+            //    case "Date":
+            //        employees = employees.OrderBy(s => s.BirthDate);
+            //        break;
+            //    case "date_desc":
+            //        employees = employees.OrderByDescending(s => s.BirthDate);
+            //        break;
+            //    default:
+            //        employees = employees.OrderBy(s => (s.FirstName + " " + s.MiddleName + " " + s.LastName + " " + s.FourthName + " " + s.SurName));
+            //        break;
+            //}
+
+            // pageSize = 3;
+            ////var employeeStatusVM = new EmployeeStatusViewModel
+            ////{
+            ////    Statuses = new SelectList(await statusQuery.Distinct().ToListAsync()),
+            ////    Employees = await PaginatedList<Employee>.CreateAsync(employees.AsNoTracking(), pageNumber ?? 1, pageSize)
+            ////};
+            ////return View(employeeStatusVM);
+
+            ////return View(await employees.AsNoTracking().ToListAsync());
+            //return View(await oldPaginatedList<Employee>.CreateAsync(employees.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Employees/Details/5

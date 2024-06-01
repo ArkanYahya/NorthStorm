@@ -167,24 +167,24 @@ namespace NorthStorm.Data
 
 
 
-            var employeeRecruitments = new EmployeeRecruitment[]
-            {
-                    new EmployeeRecruitment { EmployeeId = 1000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
-                    new EmployeeRecruitment { EmployeeId = 2000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "542").Id },
-                    new EmployeeRecruitment { EmployeeId = 3000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
-                    new EmployeeRecruitment { EmployeeId = 4000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "643").Id },
-                    new EmployeeRecruitment { EmployeeId = 5000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "643").Id },
-                    new EmployeeRecruitment { EmployeeId = 6000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "733").Id },
-                    new EmployeeRecruitment { EmployeeId = 7000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
-                    new EmployeeRecruitment { EmployeeId = 8000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "542").Id },
-                    new EmployeeRecruitment { EmployeeId = 9000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
-            };
+            //var employeeRecruitments = new EmployeeRecruitment[]
+            //{
+            //        new EmployeeRecruitment { EmployeeId = 1000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
+            //        new EmployeeRecruitment { EmployeeId = 2000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "542").Id },
+            //        new EmployeeRecruitment { EmployeeId = 3000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
+            //        new EmployeeRecruitment { EmployeeId = 4000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "643").Id },
+            //        new EmployeeRecruitment { EmployeeId = 5000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "643").Id },
+            //        new EmployeeRecruitment { EmployeeId = 6000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "733").Id },
+            //        new EmployeeRecruitment { EmployeeId = 7000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
+            //        new EmployeeRecruitment { EmployeeId = 8000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "542").Id },
+            //        new EmployeeRecruitment { EmployeeId = 9000, RecruitmentId = recruitments.Single( i => i.ReferenceNo == "543").Id },
+            //};
 
-            foreach (EmployeeRecruitment er in employeeRecruitments)
-            {
-                context.EmployeeRecruitments.Add(er);
-            }
-            context.SaveChanges();
+            //foreach (EmployeeRecruitment er in employeeRecruitments)
+            //{
+            //    context.EmployeeRecruitments.Add(er);
+            //}
+            //context.SaveChanges();
 
 
         }
