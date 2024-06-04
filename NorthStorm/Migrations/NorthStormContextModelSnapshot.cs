@@ -22,6 +22,21 @@ namespace NorthStorm.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EmployeeJobTransfer", b =>
+                {
+                    b.Property<int>("EmployeesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobTransfersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeesId", "JobTransfersId");
+
+                    b.HasIndex("JobTransfersId");
+
+                    b.ToTable("EmployeeJobTransfer", (string)null);
+                });
+
             modelBuilder.Entity("EmployeeRecruitment", b =>
                 {
                     b.Property<int>("EmployeesId")
@@ -34,7 +49,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("RecruitmentsId");
 
-                    b.ToTable("EmployeeRecruitment");
+                    b.ToTable("EmployeeRecruitment", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Employee", b =>
@@ -53,8 +68,7 @@ namespace NorthStorm.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FourthName")
                         .HasColumnType("nvarchar(max)");
@@ -117,7 +131,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Gender", b =>
@@ -134,7 +148,31 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders");
+                    b.ToTable("Genders", (string)null);
+                });
+
+            modelBuilder.Entity("NorthStorm.Models.JobTransfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ReferenceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReferenceNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobTransfers", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Nationality", b =>
@@ -151,7 +189,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nationalities");
+                    b.ToTable("Nationalities", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Race", b =>
@@ -168,7 +206,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Races");
+                    b.ToTable("Races", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Recruitment", b =>
@@ -197,7 +235,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Recruitments");
+                    b.ToTable("Recruitments", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Religion", b =>
@@ -214,7 +252,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Religiones");
+                    b.ToTable("Religiones", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.State", b =>
@@ -231,7 +269,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("State");
+                    b.ToTable("State", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Status", b =>
@@ -247,7 +285,22 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
+                });
+
+            modelBuilder.Entity("EmployeeJobTransfer", b =>
+                {
+                    b.HasOne("NorthStorm.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NorthStorm.Models.JobTransfer", null)
+                        .WithMany()
+                        .HasForeignKey("JobTransfersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EmployeeRecruitment", b =>

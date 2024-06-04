@@ -21,40 +21,9 @@ namespace NorthStorm.Controllers
             _EmployeeRepo = employeeRepo;
         }
 
-        // GET: Employees
-        //public async Task<IActionResult> Index(string searchString)
-        //{
-        //    if (_context.Employees == null)
-        //    {
-        //        return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
-        //    }
-
-        //    var employees = _context.Employees
-        //        .Include(e => e.gender)
-        //        .Include(e => e.nationality)
-        //        .Include(e => e.race)
-        //        .Include(e => e.religion)
-        //        .Include(e => e.status)
-        //        .AsNoTracking();
-
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        // لانه ليس حقلا في الجدول  FullName للبحث عن الاسم الكامل، ولا يمكن استخدام
-        //        employees = employees.Where(s => 
-        //        s.Id.ToString().Equals(searchString) ||
-        //        s.FirstName.Contains(searchString) || 
-        //        s.MiddleName.Contains(searchString) ||
-        //        s.LastName.Contains(searchString) ||
-        //        s.FourthName.Contains(searchString) ||
-        //        s.SurName.Contains(searchString)
-        //        );
-        //    }
-
-        //    return View(await employees.ToListAsync());
-        //}
 
         // GET: Employees
-        public IActionResult Index(
+        public async Task<IActionResult> Index(
             string sortExpression = "",
             string SearchText = "",
             int pg = 1,
@@ -70,7 +39,7 @@ namespace NorthStorm.Controllers
 
             ViewBag.SearchText = SearchText;
 
-            PaginatedList<Employee> items = _EmployeeRepo.GetItems(sortModel.SortedProperty, sortModel.SortedOrder, SearchText, pg, pageSize);
+            PaginatedList<Employee> items = await _EmployeeRepo.GetItems(sortModel.SortedProperty, sortModel.SortedOrder, SearchText, pg, pageSize);
 
             var pager = new PagerModel(items.TotalRecords, pg, pageSize);
 
@@ -80,63 +49,6 @@ namespace NorthStorm.Controllers
             TempData["CurrentPage"] = pg;
             return View(items);
 
-            // Use LINQ to get list of state.
-            //IQueryable<string> statusQuery = from m in _context.Employees
-            //                                 orderby m.status.Name
-            //                                 select m.status.Name;
-
-            //var employees = _context.Employees
-            //    .Include(e => e.gender)
-            //    .Include(e => e.nationality)
-            //    .Include(e => e.race)
-            //    .Include(e => e.religion)
-            //    .Include(e => e.status)
-            //    .AsNoTracking();
-
-
-            //if (!string.IsNullOrEmpty(searchString))
-            //{
-            //    employees = employees.Where(s =>
-            //                   s.Id.ToString().Equals(searchString) ||
-            //                   s.FirstName.Contains(searchString) ||
-            //                   s.MiddleName.Contains(searchString) ||
-            //                   s.LastName.Contains(searchString) ||
-            //                   s.FourthName.Contains(searchString) ||
-            //                   s.SurName.Contains(searchString)
-            //                   );
-            //}
-
-            //if (!string.IsNullOrEmpty(employeeStatus))
-            //{
-            //    employees = employees.Where(x => x.status.Name == employeeStatus);
-            //}
-
-            //switch (sortOrder)
-            //{
-            //    case "name_desc":
-            //        employees = employees.OrderByDescending(s => (s.FirstName + " " + s.MiddleName + " " + s.LastName + " " + s.FourthName + " " + s.SurName));
-            //        break;
-            //    case "Date":
-            //        employees = employees.OrderBy(s => s.BirthDate);
-            //        break;
-            //    case "date_desc":
-            //        employees = employees.OrderByDescending(s => s.BirthDate);
-            //        break;
-            //    default:
-            //        employees = employees.OrderBy(s => (s.FirstName + " " + s.MiddleName + " " + s.LastName + " " + s.FourthName + " " + s.SurName));
-            //        break;
-            //}
-
-            // pageSize = 3;
-            ////var employeeStatusVM = new EmployeeStatusViewModel
-            ////{
-            ////    Statuses = new SelectList(await statusQuery.Distinct().ToListAsync()),
-            ////    Employees = await PaginatedList<Employee>.CreateAsync(employees.AsNoTracking(), pageNumber ?? 1, pageSize)
-            ////};
-            ////return View(employeeStatusVM);
-
-            ////return View(await employees.AsNoTracking().ToListAsync());
-            //return View(await oldPaginatedList<Employee>.CreateAsync(employees.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Employees/Details/5
@@ -147,14 +59,8 @@ namespace NorthStorm.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .Include(e => e.gender)
-                .Include(e => e.nationality)
-                .Include(e => e.race)
-                .Include(e => e.religion)
-                .Include(e => e.status)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var employee = await _EmployeeRepo.GetItem((int)id);
+
             if (employee == null)
             {
                 return NotFound();
@@ -177,20 +83,39 @@ namespace NorthStorm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,MiddleName,LastName,FourthName,SurName,MotherFirstName,MotherMiddleName,MotherLastName,BirthDate,CivilNumber,IBAN,GenderId,ReligionId,RaceId,NationalityId,StatusId")] Employee employee)
         {
-            if (ModelState.IsValid)
+
+            bool IsCreated = false;
+            string errMessage = "";
+
+            try
             {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                IsCreated = await _EmployeeRepo.Create(employee);
+            }
+            catch (Exception ex)
+            {
+                errMessage = errMessage + " " + ex.Message;
             }
 
-            PopulateDropDownLists(employee.GenderId,
-                employee.NationalityId,
-                employee.RaceId,
-                employee.ReligionId,
-                employee.StatusId);
+            if (IsCreated == false)
+            {
+                errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
 
-            return View(employee);
+                TempData["ErrorMessage"] = errMessage;
+                ModelState.AddModelError("", errMessage);
+
+                PopulateDropDownLists(employee.GenderId,
+                    employee.NationalityId,
+                    employee.RaceId,
+                    employee.ReligionId,
+                    employee.StatusId);
+
+                return View(employee);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "تمت إضافة الموظف " + employee.FullName + " بنجاح.";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: Employees/Edit/5
@@ -201,9 +126,7 @@ namespace NorthStorm.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var employee = await _EmployeeRepo.GetItem((int)id);
 
             if (employee == null)
             {
@@ -215,7 +138,6 @@ namespace NorthStorm.Controllers
                 employee.RaceId,
                 employee.ReligionId,
                 employee.StatusId);
-
             return View(employee);
         }
 
@@ -226,39 +148,49 @@ namespace NorthStorm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,MiddleName,LastName,FourthName,SurName,MotherFirstName,MotherMiddleName,MotherLastName,BirthDate,CivilNumber,IBAN,GenderId,ReligionId,RaceId,NationalityId,StatusId")] Employee employee)
         {
+#warning use DbUpdateException \ DbUpdateConcurrencyException and other exceptions for all catches
+
             if (id != employee.Id)
             {
                 return NotFound();
             }
 
+
             if (ModelState.IsValid)
             {
+                bool IsEdited = false;
+                string errMessage = "";
                 try
                 {
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
+                    IsEdited = await _EmployeeRepo.Edit(employee);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!EmployeeExists(employee.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    errMessage = errMessage + " " + ex.Message;
                 }
-                //catch (DbUpdateException /* ex */)
-                //{
-                //    Log the error(uncomment ex variable name and write a log.)
-                //    ModelState.AddModelError("", "Unable to save changes. " +
-                //        "Try again, and if the problem persists, " +
-                //        "see your system administrator.");
-                //}
 
-                return RedirectToAction(nameof(Index));
+                if (IsEdited == false)
+                {
+                    errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("", errMessage);
+                    PopulateDropDownLists(employee.GenderId,
+                        employee.NationalityId,
+                        employee.RaceId,
+                        employee.ReligionId,
+                        employee.StatusId);
+                    return View(employee);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تم تحديث الموظف " + employee.FullName + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
+            TempData["SuccessMessage"] = "البيانات المدخلة غير صالحة";
+
             PopulateDropDownLists(employee.GenderId,
                 employee.NationalityId,
                 employee.RaceId,
@@ -276,43 +208,55 @@ namespace NorthStorm.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .Include(e => e.gender)
-                .Include(e => e.nationality)
-                .Include(e => e.race)
-                .Include(e => e.religion)
-                .Include(e => e.status)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var employee = await _EmployeeRepo.GetItem((int)id);
+
             if (employee == null)
             {
                 return NotFound();
             }
 
+            PopulateDropDownLists(employee.GenderId,
+                employee.NationalityId,
+                employee.RaceId,
+                employee.ReligionId,
+                employee.StatusId);
             return View(employee);
         }
 
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Employee employee)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
+            bool IsDeleted = false;
+            string errMessage = "";
+            string empName = employee.FullName;
+
+            try
             {
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                IsDeleted = await _EmployeeRepo.Delete(employee);
+            }
+            catch (Exception ex)
+            {
+                errMessage = errMessage + " " + ex.Message;
             }
 
-            return NotFound();
 
+            if (IsDeleted == false)
+            {
+                errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
+
+                TempData["ErrorMessage"] = errMessage;
+                ModelState.AddModelError("", errMessage);
+                return View(employee);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "تم حذف الموظف " + empName + " بنجاح";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        private bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.Id == id);
-        }
 
         private void PopulateDropDownLists(
             object selectedGender = null,

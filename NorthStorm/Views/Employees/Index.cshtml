@@ -143,3 +143,9 @@
         <partial name="_bottomBar" model="@pager" />
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

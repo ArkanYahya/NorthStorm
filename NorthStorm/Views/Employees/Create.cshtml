@@ -1,16 +1,17 @@
 ﻿@model NorthStorm.Models.Employee
 
 @{
-    ViewData["Title"] = "الموظفين";
+    ViewData["Title"] = "إضافة موظف";
 }
 
-<h1>إضافة موظف</h1>
-
-<h4></h4>
+<h3>@ViewData["Title"]</h3>
 <hr />
-<p dir="ltr">
-    <br />
+
+<p>
+    <span class="text-danger h4">
+    </span>
 </p>
+
 <div class="card bg-light mb-3">
     <div class="card-header">المعلومات الرئيسية</div>
     <form asp-action="Create" class="card-body">

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using System.Collections.ObjectModel;
 
 namespace NorthStorm.Models
 {
@@ -150,7 +151,8 @@ namespace NorthStorm.Models
         // خاصية التنقل أدناه تثمل علاقة نوع
         // One-To-Many
         // فكل موظف مرتبط بأمر إداري خاص بالتعيين واحد أو أكثر
-        public List<Recruitment>? Recruitments{ get; set; } = new List<Recruitment> ();
+        public ICollection<Recruitment> Recruitments{ get; set; } = new Collection<Recruitment> ();
+        public ICollection<JobTransfer> JobTransfers{ get; set; } = new Collection<JobTransfer> ();
 
 
         // خاصية التنقل الخاصة بالجنس وتمثل علاقة

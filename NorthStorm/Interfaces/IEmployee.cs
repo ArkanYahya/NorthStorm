@@ -1,4 +1,5 @@
-﻿using NorthStorm.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using NorthStorm.Models;
 using NorthStorm.Models.ViewModels;
 
 namespace NorthStorm.Interfaces
@@ -7,12 +8,12 @@ namespace NorthStorm.Interfaces
     {
         public string GetErrors();
 
-        PaginatedList<Employee> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5);
-        Employee GetItem(int id); // read particular item
+        Task<PaginatedList<Employee>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5);
+        Task<Employee> GetItem(int id); // read particular item
 
-        bool Create(Employee employee);
-        bool Edit(Employee employee);
-        bool Delete(Employee employee);
+        Task<bool> Create(Employee employee);
+        Task<bool> Edit(Employee employee);
+        Task<bool> Delete(Employee employee);
 
     }
 }

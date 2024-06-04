@@ -16,17 +16,18 @@
 
 <div class="container btn-group" style="height:45px;">
 
-    <div class="col-4 p-0 justify-content-end mt-1">
+    <div class="p-0 justify-content-end mt-1">
         <form asp-action="index">
             <span class="btn-group">
-                <input class="form-control" type="text"
+                <input class="form-control col-2" type="text"
                        name="SearchText"
                        value="@ViewBag.SearchText"
                        placeholder="بحث عن" />
-                <span class="ml-2 btn-group btn-danger" style="border-radius:10px;">
+                       <div class="col-md-1"></div>
+                <span class="ml-2 btn-group btn-info col-5" style="border-radius:10px;">
                     <input class="btn btn-sm fw-bold text-white" style="font-size:medium;"
                            type="submit" value="بــحــث" />
-                    <i class="pl-2 fa fa-search align-self-center" aria-hidden="true"></i>
+                    <i class="fa fa-search align-self-center col-3" aria-hidden="true"></i>
                 </span>
             </span>
         </form>

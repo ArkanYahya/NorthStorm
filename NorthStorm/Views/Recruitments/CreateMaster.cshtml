@@ -1,16 +1,12 @@
 ﻿@model NorthStorm.Models.Recruitment
 
 @{
-    ViewData["Title"] = "تعديل أمر إداري";
+    ViewData["Title"] = "أمر إداري جديد";
 }
 
 <h3>@ViewData["Title"]</h3>
 <hr />
 
-<p>
-    <span class="text-danger h4">
-    </span>
-</p>
 
 <div class="card bg-light mb-3">
     <div class="card-header">بيانات الأمر الإداري</div>
@@ -50,8 +46,7 @@
 
 @section Scripts {
     @{
-
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
 
+    }
 }

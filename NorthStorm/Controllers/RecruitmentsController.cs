@@ -5,6 +5,7 @@ using NorthStorm.Data;
 using NorthStorm.Interfaces;
 using NorthStorm.Models;
 using NorthStorm.Models.ViewModels;
+using NorthStorm.Repositories;
 using NorthStorm.ViewModels;
 
 namespace NorthStorm.Controllers
@@ -23,31 +24,12 @@ namespace NorthStorm.Controllers
         }
 
         // GET: Recruitments
-        //public async Task<IActionResult> Index(int? id, int? employeeId)
-        //{
-        //    var viewModel = new List<Recruitment>();
-        //    viewModel = await _context.Recruitments
-        //          .Include(i => i.Employees)
-        //          .AsNoTracking()
-        //          .OrderBy(i => i.Id)
-        //          .ToListAsync();
-
-        //    if (id != null)
-        //    {
-        //        ViewData["RecruitmentId"] = id.Value;
-        //        //Recruitment recruitment = viewModel.Where(
-        //        //    i => i.Id == id.Value).Single();
-        //        //viewModel.FirstOrDefault(recruitment).Employees = (ICollection<Employee>) viewModel.Select(s => s..Employees);
-        //    }
-
-        //    return View(viewModel);
-        //}
 #warning use async Task and await and AskNoTracking for all repos
         public IActionResult Index(
-            int? selectedId, 
-            string sortExpression = "", 
-            string SearchText = "", 
-            int pg = 1, 
+            int? selectedId,
+            string sortExpression = "",
+            string SearchText = "",
+            int pg = 1,
             int pageSize = 5)
         {
             SortModel sortModel = new SortModel();
@@ -60,7 +42,6 @@ namespace NorthStorm.Controllers
 
             if (selectedId != null)
                 ViewData["RecruitmentId"] = selectedId.Value;
-
 
             ViewBag.SearchText = SearchText;
 
@@ -111,12 +92,13 @@ namespace NorthStorm.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ReferenceNo,ReferenceDate,Subject, Employees")]  Recruitment recruitment)
+        public async Task<IActionResult> Create([Bind("Id,ReferenceNo,ReferenceDate,Subject, Employees")] Recruitment recruitment)
         {
             if (ModelState.IsValid)
             {
+#warning handle it manually
                 // لحذف الموظفين الذين تم حذفهم من نافذة الادخال قبل الحفظ
-                recruitment.Employees.RemoveAll(a => string.IsNullOrEmpty(a.FirstName));
+                //recruitment.Employees.RemoveAll(a => string.IsNullOrEmpty(a.FirstName));
 
                 // لتحميل قوائم الجنس والدين والقومية ... الخ
                 PopulateDropDownLists();
@@ -125,6 +107,94 @@ namespace NorthStorm.Controllers
                 {
                     _context.Recruitments.Add(recruitment);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = ex.Message;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", ex.Message);
+                }
+            }
+
+            return View(recruitment);
+        }
+
+
+        // GET: Recruitments/Create
+        public IActionResult CreateMaster()
+        {
+            Recruitment recruitment = new Recruitment();
+            recruitment.ReferenceDate = DateTime.Now;
+            return View(recruitment);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMaster([Bind("Id,ReferenceNo,ReferenceDate,Subject")] Recruitment recruitment)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Recruitments.Add(recruitment);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = ex.Message;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", ex.Message);
+                }
+            }
+
+            return View(recruitment);
+        }
+
+
+        public IActionResult CreateDetails(int? SelectedRecruitment)
+        {
+            if (SelectedRecruitment == null)
+            {
+                return NotFound();
+            }
+
+            var recruitment = _context.Recruitments
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == SelectedRecruitment);
+
+            if (recruitment == null)
+            {
+                return NotFound();
+            }
+
+            PopulateDropDownLists();
+            recruitment.Employees.Add(new Employee() { BirthDate = DateTime.Now });
+            return View(recruitment);
+        }
+
+        // POST: Recruitments/CreateDetails
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDetails([Bind("Id,ReferenceNo,ReferenceDate,Subject, Employees")] Recruitment recruitment)
+        {
+#warning add return to view if error happends or show error
+            if (ModelState.IsValid)
+            {
+                // لتحميل قوائم الجنس والدين والقومية ... الخ
+                //PopulateDropDownLists();
+
+                try
+                {
+                    var newRecruitment = await _context.Recruitments.
+                        Include(x => x.Employees).
+                        FirstOrDefaultAsync(m => m.Id == recruitment.Id);
+                    newRecruitment.Employees.Add(recruitment.Employees.ElementAt(0));
+
+                    _context.Recruitments.Update(newRecruitment);
+                    await _context.SaveChangesAsync();
+
                     TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
                     return RedirectToAction(nameof(Index));
                 }
@@ -207,6 +277,8 @@ namespace NorthStorm.Controllers
                 {
                     _context.Update(recruitment);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "تم تحديث الأمر ذي العدد " + recruitment.ReferenceNo + " المؤرخ في " + recruitment.ReferenceDate.ToString("dd-MM-yyyy") + " بنجاح";
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

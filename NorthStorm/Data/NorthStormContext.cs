@@ -22,7 +22,7 @@ namespace NorthStorm.Data
         public DbSet<Religion> Religiones { get; set; }
         public DbSet<State> State { get; set; }
         public DbSet<Status> Statuses { get; set; }
-
+        public DbSet<JobTransfer> JobTransfers { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

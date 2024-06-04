@@ -1,0 +1,215 @@
+﻿@model NorthStorm.Models.Recruitment
+
+@{
+    ViewData["Title"] = "الموظفين";
+}
+
+<h1>إضافة موظف</h1>
+
+<h4></h4>
+<hr />
+<p dir="ltr">
+    <br />
+</p>
+@* <div class="card bg-light mb-3">
+    <div class="card-header">بيانات الأمر الإداري</div>
+    <div class="card-body">
+        <div class="row col-md-12">
+            <div class="form-group col-md-4">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.ReferenceNo)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.ReferenceNo)
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.ReferenceDate)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.ReferenceDate)
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <div class="control-label">
+                    @Html.DisplayNameFor(model => model.Subject)
+                </div>
+                <div class="form-control">
+                    @Html.DisplayFor(model => model.Subject)
+                </div>
+            </div>
+            <div class="form-group col-md-2 align-self-end text-md-center">
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <br />
+
+    </div>
+</div> *@
+
+
+<form asp-action="CreateDetails">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card bg-light mb-3">
+        <div class="card-header">بيانات الأمر الإداري</div>
+        <div class="card-body">
+            <div class="row col-md-12">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group col-md-4">
+                    <label asp-for="ReferenceNo" class="control-label"></label>
+                    <input asp-for="ReferenceNo" class="form-control" readonly />
+                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="ReferenceDate" class="control-label"></label>
+                    <input asp-for="ReferenceDate" class="form-control" readonly />
+                    <span asp-validation-for="ReferenceDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Subject" class="control-label"></label>
+                    <input asp-for="Subject" class="form-control" readonly />
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 align-self-end text-md-center">
+                  
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <br />
+        </div>
+    </div>
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">المعلومات الرئيسية</div>
+        <div class="card-body">
+            <div class="row col-md-12">
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().Id" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().Id" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().Id" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().FirstName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().FirstName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().MiddleName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().MiddleName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().MiddleName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().LastName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().LastName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().FourthName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().FourthName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().FourthName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().SurName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().SurName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().SurName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().MotherFirstName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().MotherFirstName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().MotherFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().MotherMiddleName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().MotherMiddleName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().MotherMiddleName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().MotherLastName" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().MotherLastName" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().MotherLastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().BirthDate" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().BirthDate" class="form-control" />
+                    <span asp-validation-for="Employees.FirstOrDefault().BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().gender" class="control-label"></label>
+                    <select asp-for="Employees.FirstOrDefault().GenderId" class="form-control" asp-items="ViewBag.GenderId">
+                        <option value="">-- إختر الجنس --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().religion" class="control-label"></label>
+                    <select asp-for="Employees.FirstOrDefault().ReligionId" class="form-control" asp-items="ViewBag.ReligionId">
+                        <option value="">-- إختر الديانة --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().race" class="control-label"></label>
+                    <select asp-for="Employees.FirstOrDefault().RaceId" class="form-control" asp-items="ViewBag.RaceId">
+                        <option value="">-- إختر القومية --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().nationality" class="control-label"></label>
+                    <select asp-for="Employees.FirstOrDefault().NationalityId" class="form-control" asp-items="ViewBag.NationalityId">
+                        <option value="">-- إختر الجنسية --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().CivilNumber" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().CivilNumber" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().IBAN" class="control-label"></label>
+                    <input asp-for="Employees.FirstOrDefault().IBAN" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Employees.FirstOrDefault().status" class="control-label"></label>
+                    <select asp-for="Employees.FirstOrDefault().StatusId" class="form-control" asp-items="ViewBag.StatusId">
+                        <option value="">-- إختر الحالة --</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2 align-self-end text-md-end">
+                    <input type="submit" value="حفظ" class="btn btn-primary w-100" />
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <br />
+
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">إلغاء</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

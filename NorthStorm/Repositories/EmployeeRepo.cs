@@ -21,26 +21,27 @@ namespace NorthStorm.Repositories
         {
             _context = context;
         }
-        public bool Create(Employee employee)
+
+
+        public async Task<bool> Create(Employee employee)
         {
-            bool retVal = false;
             _errors = "";
 
             try
             {
                 _context.Employees.Add(employee);
-                _context.SaveChanges();
-                retVal = true;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Create Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
 
-        public bool Delete(Employee employee)
+        public async Task<bool> Delete(Employee employee)
         {
             bool retVal = false;
             _errors = "";
@@ -49,7 +50,7 @@ namespace NorthStorm.Repositories
             {
                 _context.Attach(employee);
                 _context.Entry(employee).State = EntityState.Deleted;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 retVal = true;
             }
             catch (Exception ex)
@@ -60,22 +61,17 @@ namespace NorthStorm.Repositories
         }
 
 
-        public bool Edit(Employee employee)
+        public async Task<bool> Edit(Employee employee)
         {
             bool retVal = false;
             _errors = "";
 
             try
             {
-
-                List<Employee> poDetails = _context.Employees.Where(d => d.Id == employee.Id).ToList();
-                _context.Employees.RemoveRange(poDetails);
-                _context.SaveChanges();
-
+                //_context.Update(recruitment);
                 _context.Attach(employee);
                 _context.Entry(employee).State = EntityState.Modified;
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
 
                 retVal = true;
             }
@@ -91,39 +87,38 @@ namespace NorthStorm.Repositories
 
         private List<Employee> DoSort(List<Employee> items, string SortProperty, SortOrder sortOrder)
         {
-
-            if (SortProperty == "FullName")
+            switch (SortProperty)
             {
-                if (sortOrder == SortOrder.Ascending)
-                    items = items.OrderBy(n => n.FullName).ToList();
-                else
-                    items = items.OrderByDescending(n => n.FullName).ToList();
-            }
-            else if (SortProperty == "MotherName")
-            {
-                if (sortOrder == SortOrder.Ascending)
-                    items = items.OrderBy(n => n.MotherName).ToList();
-                else
-                    items = items.OrderByDescending(n => n.MotherName).ToList();
-            }
-            else
-            {
-                if (sortOrder == SortOrder.Descending)
-                    items = items.OrderByDescending(d => d.Id).ToList();
-                else
-                    items = items.OrderBy(d => d.Id).ToList();
+                case "FullName":
+                    if (sortOrder == SortOrder.Ascending)
+                        items = items.OrderBy(n => n.FullName).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.FullName).ToList();
+                    break;
+                case "MotherName":
+                    if (sortOrder == SortOrder.Ascending)
+                        items = items.OrderBy(n => n.MotherName).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.MotherName).ToList();
+                    break;
+                default:
+                    if (sortOrder == SortOrder.Descending)
+                        items = items.OrderByDescending(d => d.Id).ToList();
+                    else
+                        items = items.OrderBy(d => d.Id).ToList();
+                    break;
             }
 
             return items;
         }
 
-        public PaginatedList<Employee> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
+        public async Task<PaginatedList<Employee>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
         {
             List<Employee> items;
 
-            if (SearchText != "" && SearchText != null)
+            if (!String.IsNullOrEmpty(SearchText))
             {
-                items = _context.Employees.Where(s =>
+                items = await _context.Employees.Where(s =>
                 s.Id.ToString().Equals(SearchText) ||
                 s.FirstName.Contains(SearchText) ||
                 s.MiddleName.Contains(SearchText) ||
@@ -135,17 +130,20 @@ namespace NorthStorm.Repositories
                     .Include(e => e.race)
                     .Include(e => e.religion)
                     .Include(e => e.status)
-                .ToList();
+                    .AsNoTracking()
+                    .ToListAsync();
             }
             else
-                items = _context.Employees
+            {
+                items = await _context.Employees
                     .Include(e => e.gender)
                     .Include(e => e.nationality)
                     .Include(e => e.race)
                     .Include(e => e.religion)
                     .Include(e => e.status)
-                   //.AsNoTracking();
-                   .ToList();
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
 
             items = DoSort(items, SortProperty, sortOrder);
 
@@ -155,10 +153,16 @@ namespace NorthStorm.Repositories
         }
 
 
-        public Employee GetItem(int Id)
+        public async Task<Employee> GetItem(int Id)
         {
-            Employee item = _context.Employees.Where(i => i.Id == Id)
-                     .FirstOrDefault();
+            Employee item = await _context.Employees
+                .Include(e => e.gender)
+                .Include(e => e.nationality)
+                .Include(e => e.race)
+                .Include(e => e.religion)
+                .Include(e => e.status)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == Id);
             return item;
         }
 

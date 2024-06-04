@@ -128,6 +128,11 @@
             </div>
             <form asp-action="Delete" class="form-group col-md-2 align-self-end text-md-center">
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="FirstName" />
+                <input type="hidden" asp-for="MiddleName" />
+                <input type="hidden" asp-for="LastName" />
+                <input type="hidden" asp-for="FourthName" />
+                <input type="hidden" asp-for="SurName" />
                 <input type="submit" value="حذف" class="btn btn-danger w-75" />
             </form>
         </div>
@@ -141,5 +146,5 @@
 </div>
 
 <div>
-    <a asp-action="Index">العودة إلى القائمة</a>
+    <a asp-action="Index">إلغاء</a>
 </div>

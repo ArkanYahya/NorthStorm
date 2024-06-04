@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NorthStorm.Models
 {
-    public class Recruitment
+    public class JobTransfer
     {
         #region Model Properties
         public int Id { get; set; }
@@ -20,6 +21,12 @@ namespace NorthStorm.Models
 
         [NotMapped, Display(Name ="عدد الموظفين")]
         public int EmployeeCount { get; set; }
+
+        [NotMapped, Display(Name = "نقل من")]
+        public int TransferFrom { get; set; }
+
+        [NotMapped, Display(Name = "نقل إلى")]
+        public int TransferTo { get; set; }
         #endregion
 
         #region Navigation Properties

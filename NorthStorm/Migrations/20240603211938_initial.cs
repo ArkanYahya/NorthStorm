@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NorthStorm.Migrations
 {
     /// <inheritdoc />
-    public partial class intial2 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,21 @@ namespace NorthStorm.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobTransfers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReferenceNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReferenceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobTransfers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,7 +130,7 @@ namespace NorthStorm.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FourthName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -176,6 +191,30 @@ namespace NorthStorm.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmployeeJobTransfer",
+                columns: table => new
+                {
+                    EmployeesId = table.Column<int>(type: "int", nullable: false),
+                    JobTransfersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeJobTransfer", x => new { x.EmployeesId, x.JobTransfersId });
+                    table.ForeignKey(
+                        name: "FK_EmployeeJobTransfer_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeJobTransfer_JobTransfers_JobTransfersId",
+                        column: x => x.JobTransfersId,
+                        principalTable: "JobTransfers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeRecruitment",
                 columns: table => new
                 {
@@ -198,6 +237,11 @@ namespace NorthStorm.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeJobTransfer_JobTransfersId",
+                table: "EmployeeJobTransfer",
+                column: "JobTransfersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeRecruitment_RecruitmentsId",
@@ -244,7 +288,13 @@ namespace NorthStorm.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EmployeeJobTransfer");
+
+            migrationBuilder.DropTable(
                 name: "EmployeeRecruitment");
+
+            migrationBuilder.DropTable(
+                name: "JobTransfers");
 
             migrationBuilder.DropTable(
                 name: "Employees");

@@ -1,16 +1,17 @@
 ﻿@model NorthStorm.Models.Employee
 
 @{
-    ViewData["Title"] = "الموظفين";
+    ViewData["Title"] = "تعديل موظف";
 }
 
-<h1>تعديل موظف</h1>
-
-<h4></h4>
+<h3>@ViewData["Title"]</h3>
 <hr />
-<p dir="ltr">
-    <br />
+
+<p>
+    <span class="text-danger h4">
+    </span>
 </p>
+
 <div class="card bg-light mb-3">
     <div class="card-header">المعلومات الرئيسية</div>
     <form asp-action="Edit" class="card-body">
@@ -135,7 +136,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">العودة إلى القائمة</a>
+    <a asp-action="Index">إلغاء</a>
 </div>
 
 
