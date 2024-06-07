@@ -21,7 +21,6 @@ namespace NorthStorm.Controllers
             _EmployeeRepo = employeeRepo;
         }
 
-
         // GET: Employees
         public async Task<IActionResult> Index(
             string sortExpression = "",
@@ -83,38 +82,50 @@ namespace NorthStorm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,MiddleName,LastName,FourthName,SurName,MotherFirstName,MotherMiddleName,MotherLastName,BirthDate,CivilNumber,IBAN,GenderId,ReligionId,RaceId,NationalityId,StatusId")] Employee employee)
         {
-
-            bool IsCreated = false;
-            string errMessage = "";
-
-            try
+            if (ModelState.IsValid)
             {
-                IsCreated = await _EmployeeRepo.Create(employee);
+                bool IsCreated = false;
+                string errMessage = "";
+
+                try
+                {
+                    IsCreated = await _EmployeeRepo.Create(employee);
+                }
+                catch (Exception ex)
+                {
+                    errMessage = errMessage + " " + ex.Message;
+                }
+
+                if (IsCreated == false)
+                {
+                    errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("EmployeesCreate_POST", errMessage);
+
+                    PopulateDropDownLists(employee.GenderId,
+                        employee.NationalityId,
+                        employee.RaceId,
+                        employee.ReligionId,
+                        employee.StatusId);
+
+                    return View(employee);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تمت إضافة الموظف " + employee.FullName + " بنجاح.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch (Exception ex)
+            else
             {
-                errMessage = errMessage + " " + ex.Message;
-            }
-
-            if (IsCreated == false)
-            {
-                errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
-
-                TempData["ErrorMessage"] = errMessage;
-                ModelState.AddModelError("", errMessage);
-
+                TempData["ErrorMessage"] = "تأكد من صحة البيانات المدخلة";
                 PopulateDropDownLists(employee.GenderId,
                     employee.NationalityId,
                     employee.RaceId,
                     employee.ReligionId,
                     employee.StatusId);
-
                 return View(employee);
-            }
-            else
-            {
-                TempData["SuccessMessage"] = "تمت إضافة الموظف " + employee.FullName + " بنجاح.";
-                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -174,7 +185,7 @@ namespace NorthStorm.Controllers
                     errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
 
                     TempData["ErrorMessage"] = errMessage;
-                    ModelState.AddModelError("", errMessage);
+                    ModelState.AddModelError("EmployeesEdit_POST", errMessage);
                     PopulateDropDownLists(employee.GenderId,
                         employee.NationalityId,
                         employee.RaceId,
@@ -187,17 +198,19 @@ namespace NorthStorm.Controllers
                     TempData["SuccessMessage"] = "تم تحديث الموظف " + employee.FullName + " بنجاح";
                     return RedirectToAction(nameof(Index));
                 }
-
             }
-            TempData["SuccessMessage"] = "البيانات المدخلة غير صالحة";
+            else
+            {
+                TempData["ErrorMessage"] = "البيانات المدخلة غير صالحة";
 
-            PopulateDropDownLists(employee.GenderId,
-                employee.NationalityId,
-                employee.RaceId,
-                employee.ReligionId,
-                employee.StatusId);
+                PopulateDropDownLists(employee.GenderId,
+                    employee.NationalityId,
+                    employee.RaceId,
+                    employee.ReligionId,
+                    employee.StatusId);
 
-            return View(employee);
+                return View(employee);
+            }
         }
 
         // GET: Employees/Delete/5
@@ -230,7 +243,7 @@ namespace NorthStorm.Controllers
         {
             bool IsDeleted = false;
             string errMessage = "";
-            string empName = employee.FullName;
+            string employeeInfo = employee.FullName;
 
             try
             {
@@ -241,22 +254,20 @@ namespace NorthStorm.Controllers
                 errMessage = errMessage + " " + ex.Message;
             }
 
-
             if (IsDeleted == false)
             {
                 errMessage = errMessage + " " + _EmployeeRepo.GetErrors();
 
                 TempData["ErrorMessage"] = errMessage;
-                ModelState.AddModelError("", errMessage);
+                ModelState.AddModelError("EmployeesDelete_POST", errMessage);
                 return View(employee);
             }
             else
             {
-                TempData["SuccessMessage"] = "تم حذف الموظف " + empName + " بنجاح";
+                TempData["SuccessMessage"] = "تم حذف الموظف " + employeeInfo + " بنجاح";
                 return RedirectToAction(nameof(Index));
             }
         }
-
 
         private void PopulateDropDownLists(
             object selectedGender = null,

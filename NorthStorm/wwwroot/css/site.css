@@ -32,10 +32,16 @@ body {
         position: absolute;
         top: 0;
         right: 100%;
-        margin-right: .125em;
-        color:black;
+        margin-right: 0;
+        color: black;
     }
 }
+
+.nav-link:hover{
+    color:white !important;
+    background-color: royalblue !important;
+}
+
 /********* main menu css code **************/ 
 
 

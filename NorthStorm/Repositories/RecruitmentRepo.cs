@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NorthStorm.Data;
 using NorthStorm.Interfaces;
 using NorthStorm.Models;
@@ -15,123 +16,145 @@ namespace NorthStorm.Repositories
             return _errors;
         }
 
-
+#warning maybe I have to catch DbUpdateConcurrencyException too
         private readonly NorthStormContext _context; // for connecting to efcore.
         public RecruitmentRepo(NorthStormContext context) // will be passed by dependency injection.
         {
             _context = context;
         }
-        public bool Create(Recruitment recruitment)
+        public async Task<bool> Create(Recruitment recruitment)
         {
-            bool retVal = false;
             _errors = "";
 
             try
             {
                 _context.Recruitments.Add(recruitment);
-                _context.SaveChanges();
-                retVal = true;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Create Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
 
-        public bool Delete(Recruitment recruitment)
+        public async Task<bool> Delete(Recruitment recruitment)
         {
-            bool retVal = false;
             _errors = "";
 
             try
             {
                 _context.Attach(recruitment);
                 _context.Entry(recruitment).State = EntityState.Deleted;
-                _context.SaveChanges();
-                retVal = true;
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Delete Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
 
-        public bool Edit(Recruitment recruitment)
+        public async Task<bool> Edit(Recruitment recruitment)
         {
-            bool retVal = false;
             _errors = "";
 
             try
             {
-
-                List<Employee> poDetails = _context.Employees.Where(d => d.Id == recruitment.Id).ToList();
-                _context.Employees.RemoveRange(poDetails);
-                _context.SaveChanges();
+                // remove deleted employees
+                List<Employee> employees = await _context.Employees
+                    .Where(d => d.Id == recruitment.Id).ToListAsync();
+                _context.Employees.RemoveRange(employees);
+                await _context.SaveChangesAsync();
 
                 _context.Attach(recruitment);
                 _context.Entry(recruitment).State = EntityState.Modified;
                 _context.Employees.AddRange(recruitment.Employees);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
-
-                retVal = true;
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
+        public async Task<bool> Update(Recruitment recruitment)
+        {
+            _errors = "";
 
+            try
+            {
+                _context.Recruitments.Update(recruitment);
+                await _context.SaveChangesAsync();
+#warning check wether to delete this code or not
+                //_context.Attach(recruitment);
+                //_context.Entry(recruitment).State = EntityState.Modified;
+                //_context.Employees.AddRange(recruitment.Employees);
+                //await _context.SaveChangesAsync();
 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message;
+            }
+            return false;
+        }
 
         private List<Recruitment> DoSort(List<Recruitment> items, string SortProperty, SortOrder sortOrder)
         {
-
-            if (SortProperty == "Subject")
+            switch (SortProperty)
             {
-                if (sortOrder == SortOrder.Ascending)
-                    items = items.OrderBy(n => n.Subject).ToList();
-                else
-                    items = items.OrderByDescending(n => n.Subject).ToList();
-            }
-            else if (SortProperty == "ReferenceDate")
-            {
-                if (sortOrder == SortOrder.Ascending)
-                    items = items.OrderBy(n => n.ReferenceDate).ToList();
-                else
-                    items = items.OrderByDescending(n => n.ReferenceDate).ToList();
-            }
-            else
-            {
-                if (sortOrder == SortOrder.Ascending)
-                    items = items.OrderByDescending(d => d.ReferenceNo).ToList();
-                else
-                    items = items.OrderBy(d => d.ReferenceNo).ToList();
+                case "ReferenceNo":
+                    if (sortOrder == SortOrder.Ascending)
+                        items = items.OrderBy(n => n.ReferenceNo).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.ReferenceNo).ToList();
+                    break;
+                case "ReferenceDate":
+                    if (sortOrder == SortOrder.Ascending)
+                        items = items.OrderBy(n => n.ReferenceDate).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.ReferenceDate).ToList();
+                    break;
+                default:
+                    if (sortOrder == SortOrder.Descending)
+                        items = items.OrderByDescending(d => d.Id).ToList();
+                    else
+                        items = items.OrderBy(d => d.Id).ToList();
+                    break;
             }
 
             return items;
         }
 
-        public PaginatedList<Recruitment> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
+        public async Task<PaginatedList<Recruitment>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
         {
             List<Recruitment> items;
 
-            if (SearchText != "" && SearchText != null)
+            if (!String.IsNullOrEmpty(SearchText))
             {
-                items = _context.Recruitments.Where(n => n.ReferenceNo.Contains(SearchText) || n.Subject.Contains(SearchText))
+                items = await _context.Recruitments.Where(n =>
+                n.ReferenceNo.Contains(SearchText) ||
+                n.Subject.Contains(SearchText))
                     .Include(s => s.Employees)
-                    .ToList();
+                    .AsNoTracking()
+                    .ToListAsync();
             }
             else
-                items = _context.Recruitments
-                   .Include(s => s.Employees)
-                   .ToList();
+            {
+                items = await _context.Recruitments
+                    .Include(s => s.Employees)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
 
 
 
@@ -144,12 +167,15 @@ namespace NorthStorm.Repositories
         }
 
 
-        public Recruitment GetItem(int Id)
+        public async Task<Recruitment> GetItem(int Id)
         {
-            Recruitment item = _context.Recruitments.Where(i => i.Id == Id)
+            Recruitment item = await _context.Recruitments
                      .Include(d => d.Employees)
-                     .FirstOrDefault();
+                     .FirstOrDefaultAsync(i => i.Id == Id);
             return item;
         }
+
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
@@ -13,9 +14,7 @@ namespace NorthStorm.Controllers
     public class RecruitmentsController : Controller
     {
         private readonly NorthStormContext _context;
-
         private readonly IRecruitment _RecruitmentRepo;
-
 
         public RecruitmentsController(NorthStormContext context, IRecruitment recruitmentRepo)
         {
@@ -24,8 +23,7 @@ namespace NorthStorm.Controllers
         }
 
         // GET: Recruitments
-#warning use async Task and await and AskNoTracking for all repos
-        public IActionResult Index(
+        public async Task<IActionResult> Index(
             int? selectedId,
             string sortExpression = "",
             string SearchText = "",
@@ -33,9 +31,9 @@ namespace NorthStorm.Controllers
             int pageSize = 5)
         {
             SortModel sortModel = new SortModel();
+            sortModel.AddColumn("Id");
             sortModel.AddColumn("ReferenceNo");
             sortModel.AddColumn("ReferenceDate");
-            sortModel.AddColumn("Subject");
             sortModel.ApplySort(sortExpression);
             ViewData["sortModel"] = sortModel;
             ViewData["pageSize"] = pageSize;
@@ -45,8 +43,7 @@ namespace NorthStorm.Controllers
 
             ViewBag.SearchText = SearchText;
 
-            PaginatedList<Recruitment> items = _RecruitmentRepo.GetItems(sortModel.SortedProperty, sortModel.SortedOrder, SearchText, pg, pageSize);
-
+            PaginatedList<Recruitment> items = await _RecruitmentRepo.GetItems(sortModel.SortedProperty, sortModel.SortedOrder, SearchText, pg, pageSize);
 
             var pager = new PagerModel(items.TotalRecords, pg, pageSize);
 
@@ -66,8 +63,8 @@ namespace NorthStorm.Controllers
                 return NotFound();
             }
 
-            var recruitment = await _context.Recruitments
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var recruitment = await _RecruitmentRepo.GetItem((int)id);
+
             if (recruitment == null)
             {
                 return NotFound();
@@ -96,28 +93,51 @@ namespace NorthStorm.Controllers
         {
             if (ModelState.IsValid)
             {
-#warning handle it manually
+                bool IsCreated = false;
+                string errMessage = "";
+
                 // لحذف الموظفين الذين تم حذفهم من نافذة الادخال قبل الحفظ
-                //recruitment.Employees.RemoveAll(a => string.IsNullOrEmpty(a.FirstName));
+                foreach (var item in recruitment.Employees)
+                {
+                    if (String.IsNullOrEmpty(item.FirstName))
+                        recruitment.Employees.Remove(item);
+                }
 
                 // لتحميل قوائم الجنس والدين والقومية ... الخ
                 PopulateDropDownLists();
 
                 try
                 {
-                    _context.Recruitments.Add(recruitment);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
-                    return RedirectToAction(nameof(Index));
+                    IsCreated = await _RecruitmentRepo.Create(recruitment);
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorMessage"] = ex.Message;
-                    ModelState.AddModelError("RecruitmentsCreate_POST", ex.Message);
+                    errMessage = errMessage + " " + ex.Message;
+                }
+
+                if (IsCreated == false)
+                {
+                    errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", errMessage);
+
+                    PopulateDropDownLists();
+
+                    return View(recruitment);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " المؤرخ في " + recruitment.ReferenceDate.ToString("dd/MM/yyyy") + " بنجاح";
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
-            return View(recruitment);
+            else
+            {
+                TempData["ErrorMessage"] = "البيانات المدخلة غير صحيحة";
+                PopulateDropDownLists();
+                return View(recruitment);
+            }
         }
 
 
@@ -135,34 +155,49 @@ namespace NorthStorm.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool IsCreated = false;
+                string errMessage = "";
+
                 try
                 {
-                    _context.Recruitments.Add(recruitment);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
-                    return RedirectToAction(nameof(Index));
+                    IsCreated = await _RecruitmentRepo.Create(recruitment);
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorMessage"] = ex.Message;
-                    ModelState.AddModelError("RecruitmentsCreate_POST", ex.Message);
+                    errMessage = errMessage + " " + ex.Message;
+                }
+
+                if (IsCreated == false)
+                {
+                    errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", errMessage);
+
+                    return View(recruitment);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " المؤرخ في " + recruitment.ReferenceDate.ToString("dd/MM/yyyy") + " بنجاح";
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
-            return View(recruitment);
+            else
+            {
+                TempData["ErrorMessage"] = "تأكد من صحة البيانات المدخلة";
+                return View(recruitment);
+            }
         }
 
 
-        public IActionResult CreateDetails(int? SelectedRecruitment)
+        public async Task<IActionResult> CreateDetails(int? SelectedRecruitment)
         {
             if (SelectedRecruitment == null)
             {
                 return NotFound();
             }
 
-            var recruitment = _context.Recruitments
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == SelectedRecruitment);
+            var recruitment = await _RecruitmentRepo.GetItem((int)SelectedRecruitment);
 
             if (recruitment == null)
             {
@@ -170,7 +205,17 @@ namespace NorthStorm.Controllers
             }
 
             PopulateDropDownLists();
+
             recruitment.Employees.Add(new Employee() { BirthDate = DateTime.Now });
+
+            //ICollection<Employee> items = await _context.Employees
+            //    .Where(x=>x.Recruitments.Count == 0)
+            //    .AsNoTracking()
+            //    .ToListAsync();
+            //ViewBag.emps = items;
+            //ViewBag.empId = new SelectList(items, "Id", "Id");
+
+
             return View(recruitment);
         }
 
@@ -179,33 +224,175 @@ namespace NorthStorm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDetails([Bind("Id,ReferenceNo,ReferenceDate,Subject, Employees")] Recruitment recruitment)
         {
-#warning add return to view if error happends or show error
             if (ModelState.IsValid)
             {
-                // لتحميل قوائم الجنس والدين والقومية ... الخ
-                //PopulateDropDownLists();
+                bool IsUpdated = false;
+                string errMessage = "";
 
                 try
                 {
-                    var newRecruitment = await _context.Recruitments.
-                        Include(x => x.Employees).
-                        FirstOrDefaultAsync(m => m.Id == recruitment.Id);
-                    newRecruitment.Employees.Add(recruitment.Employees.ElementAt(0));
+                    var selectedRecruitment = await _RecruitmentRepo.GetItem(recruitment.Id);
+                    selectedRecruitment.Employees.Add(recruitment.Employees.ElementAt(0));
 
-                    _context.Recruitments.Update(newRecruitment);
-                    await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "تم حفظ الأمر ذي العدد " + recruitment.ReferenceNo + " بنجاح";
-                    return RedirectToAction(nameof(Index));
+                    IsUpdated = await _RecruitmentRepo.Update(selectedRecruitment);
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorMessage"] = ex.Message;
-                    ModelState.AddModelError("RecruitmentsCreate_POST", ex.Message);
+                    errMessage = errMessage + " " + ex.Message;
+                    ModelState.AddModelError("RecruitmentsCreateDetails_POST", ex.Message);
                 }
+
+                if (IsUpdated == false)
+                {
+                    errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", errMessage);
+
+                    PopulateDropDownLists(recruitment.Employees.ElementAt(0).GenderId,
+                        recruitment.Employees.ElementAt(0).NationalityId,
+                        recruitment.Employees.ElementAt(0).RaceId,
+                        recruitment.Employees.ElementAt(0).ReligionId,
+                        recruitment.Employees.ElementAt(0).StatusId);
+
+                    return View(recruitment);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تمت إضافة الموظف \n" + recruitment.Employees.ElementAt(0).FullName +
+                        "\n على الأمر الإداري ذي العدد \n" + recruitment.ReferenceNo +
+                        " في " + recruitment.ReferenceDate.ToString("dd/MM/yyyy") + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "تأكد من صحة البيانات المدخلة";
+                PopulateDropDownLists(recruitment.Employees.ElementAt(0).GenderId,
+                    recruitment.Employees.ElementAt(0).NationalityId,
+                    recruitment.Employees.ElementAt(0).RaceId,
+                    recruitment.Employees.ElementAt(0).ReligionId,
+                    recruitment.Employees.ElementAt(0).StatusId);
+
+                return View(recruitment);
+            }
+        }
+
+        // GET: Recruitments/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recruitment = await _RecruitmentRepo.GetItem((int)id);
+
+            if (recruitment == null)
+            {
+                return NotFound();
             }
 
             return View(recruitment);
+        }
+
+        // POST: Recruitments/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ReferenceNo,ReferenceDate,Subject")] Recruitment recruitment)
+        {
+            if (id != recruitment.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                bool IsEdited = false;
+                string errMessage = "";
+                try
+                {
+                    IsEdited = await _RecruitmentRepo.Edit(recruitment);
+                }
+                catch (Exception ex)
+                {
+                    errMessage = errMessage + " " + ex.Message;
+                }
+
+                if (IsEdited == false)
+                {
+                    errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("RecruitmentsEdit_POST", errMessage);
+
+                    return View(recruitment);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تم تحديث الأمر ذي العدد \n" + recruitment.ReferenceNo + " المؤرخ في" + recruitment.ReferenceDate.ToString("dd/MM/yyyy") + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "البيانات المدخلة غير صالحة";
+
+                return View(recruitment);
+            }
+        }
+
+        // GET: Recruitments/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recruitment = await _RecruitmentRepo.GetItem((int)id);
+
+            if (recruitment == null)
+            {
+                return NotFound();
+            }
+
+            return View(recruitment);
+        }
+
+        // POST: Recruitments/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Recruitment recruitment)
+        {
+            bool IsDeleted = false;
+            string errMessage = "";
+            string recruitmentInfo = recruitment.ReferenceNo + " في " + recruitment.ReferenceDate.ToString("dd/MM/yyyy");
+
+            try
+            {
+                IsDeleted = await _RecruitmentRepo.Delete(recruitment);
+            }
+            catch (Exception ex)
+            {
+                errMessage = errMessage + " " + ex.Message;
+            }
+
+            if (IsDeleted == false)
+            {
+                errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                TempData["ErrorMessage"] = errMessage;
+                ModelState.AddModelError("RecruitmentsDelete_POST", errMessage);
+                return View(recruitment);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "تم حذف الأمر \n" + recruitmentInfo + " بنجاح";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private void PopulateDropDownLists(
@@ -243,97 +430,15 @@ namespace NorthStorm.Controllers
 
         }
 
-        // GET: Recruitments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        private void PopulateEmployeeDropDownLists(
+            object selectedEmp = null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var emp = from c in _context.Employees
+                      where c.Recruitments == null
+                      select c;
+            ViewBag.empId = new SelectList(emp.AsNoTracking(), "Id", "Name", selectedEmp);
 
-            var recruitment = await _context.Recruitments.FindAsync(id);
-            if (recruitment == null)
-            {
-                return NotFound();
-            }
-            return View(recruitment);
-        }
-
-        // POST: Recruitments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ReferenceNo,ReferenceDate,Subject")] Recruitment recruitment)
-        {
-            if (id != recruitment.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(recruitment);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "تم تحديث الأمر ذي العدد " + recruitment.ReferenceNo + " المؤرخ في " + recruitment.ReferenceDate.ToString("dd-MM-yyyy") + " بنجاح";
-
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecruitmentExists(recruitment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(recruitment);
-        }
-
-        // GET: Recruitments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var recruitment = await _context.Recruitments
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (recruitment == null)
-            {
-                return NotFound();
-            }
-
-            return View(recruitment);
-        }
-
-        // POST: Recruitments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var recruitment = await _context.Recruitments.FindAsync(id);
-            if (recruitment != null)
-            {
-                _context.Recruitments.Remove(recruitment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-
-            return NotFound();
-        }
-
-        private bool RecruitmentExists(int id)
-        {
-            return _context.Recruitments.Any(e => e.Id == id);
         }
     }
+
 }

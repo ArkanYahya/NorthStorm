@@ -43,7 +43,6 @@ namespace NorthStorm.Repositories
 
         public async Task<bool> Delete(Employee employee)
         {
-            bool retVal = false;
             _errors = "";
 
             try
@@ -51,19 +50,18 @@ namespace NorthStorm.Repositories
                 _context.Attach(employee);
                 _context.Entry(employee).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
-                retVal = true;
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Delete Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
 
         public async Task<bool> Edit(Employee employee)
         {
-            bool retVal = false;
             _errors = "";
 
             try
@@ -73,13 +71,13 @@ namespace NorthStorm.Repositories
                 _context.Entry(employee).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                retVal = true;
+                return true;
             }
             catch (Exception ex)
             {
                 _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message;
             }
-            return retVal;
+            return false;
         }
 
 

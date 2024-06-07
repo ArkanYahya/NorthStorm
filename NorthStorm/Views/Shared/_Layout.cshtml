@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NorthStorm</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NorthStorm.styles.css" asp-append-version="true" />
 
@@ -29,72 +29,82 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between dropstart">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                            <a class="nav-link text-black" href="#" aria-expanded="false">
                                 قسم إدارة الموارد البشرية
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة التعيينات
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" asp-area="" asp-controller="Recruitments" asp-action="Index">وحدة التعيينات</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة المتعاقدين</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الأرشفة</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة الترقيات
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" asp-area="" asp-controller="Employees" asp-action="Index">الموظفين</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الترقيات والترفيع</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة تغيير العناوين الوظيفية</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة ترقيات رؤساء المهن</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
-                                        شعبة العلاوات
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        شعبة الإحصاء
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة بنك المعلومات</a></li>
+                                        <li><a class="nav-link text-black" href="#">و. احصائيات القوى العاملة</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة قاعدة البيانات</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
-                                        شعبة احصائيات القوى العاملة
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        شعبة الإدارة والتوثيق
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الإدارة</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الأرشيف</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة البريد الشبكي</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الصادرة والواردة</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
-                                        شعبة التقاعد
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        شعبة الخدمة والتقاعد
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
-                                        <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة التقاعد</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة الغيابات</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة احتساب الخدمة</a></li>
+                                        <li><a class="nav-link text-black" href="#">وحدة متابعة ذوي الشهداء</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                            <a class="nav-link text-black" href="#" aria-expanded="false">
                                 قسم التطوير
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة التدريب والتطوير
-                                    </a>
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                                            </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
                                         <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
@@ -102,8 +112,10 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة الايفادات
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة .....</a></li>
@@ -114,13 +126,17 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                            <a class="nav-link text-black" href="#" aria-expanded="false">
                                 قسم العلاقات العامة
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
+
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة الاعلام
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة التوثيق</a></li>
@@ -129,8 +145,10 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة المطبعة
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة الأرشفة</a></li>
@@ -139,8 +157,10 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة الموفدين
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة الحجوزات</a></li>
@@ -151,13 +171,17 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="test nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                            <a class="test nav-link text-black" href="#" aria-expanded="false">
                                 قسم الخدمات الادارية
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
+
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة دور الضيافة
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة مركز بابا الثقافي</a></li>
@@ -166,8 +190,10 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة التغذية
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="nav-link text-black" href="#">وحدة مطعم ك1</a></li>
@@ -176,8 +202,10 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item dropend">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" aria-expanded="false">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
                                         شعبة الاسكان
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
                                     </a>
                                     <ul class="dropdown-menu text-black">
                                         <li><a class="nav-link text-black" href="#">وحدة اسكان بابا</a></li>

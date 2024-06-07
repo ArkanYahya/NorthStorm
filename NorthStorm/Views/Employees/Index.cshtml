@@ -121,17 +121,17 @@
                     <td>
                         <a asp-action="Details" asp-route-Id="@item.Id">
                             <span class="btn btn-sm btn-outline-dark">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fa fa-eye" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض التفاصيل"></i>
                             </span>
                         </a>
                         <a asp-action="Edit" asp-route-id="@item.Id">
                             <span class="btn btn-sm btn-outline-primary">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
                             </span>
                         </a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">
                             <span class="btn btn-sm btn-outline-danger">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الأمر"></i>
                             </span>
                         </a>
                     </td>
