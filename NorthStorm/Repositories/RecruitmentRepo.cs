@@ -34,7 +34,7 @@ namespace NorthStorm.Repositories
             }
             catch (Exception ex)
             {
-                _errors = "Create Failed - Sql Exception Occured , Error Info : " + ex.Message;
+                _errors = "Create Failed - Sql Exception Occured , Error Info : " + ex.Message + ex.InnerException.Message;
             }
             return false;
         }
@@ -53,7 +53,7 @@ namespace NorthStorm.Repositories
             }
             catch (Exception ex)
             {
-                _errors = "Delete Failed - Sql Exception Occured , Error Info : " + ex.Message;
+                _errors = "Delete Failed - Sql Exception Occured , Error Info : " + ex.Message + ex.InnerException.Message;
             }
             return false;
         }
@@ -80,7 +80,7 @@ namespace NorthStorm.Repositories
             }
             catch (Exception ex)
             {
-                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message;
+                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message + ex.InnerException.Message;
             }
             return false;
         }
@@ -103,7 +103,7 @@ namespace NorthStorm.Repositories
             }
             catch (Exception ex)
             {
-                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message;
+                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message + ex.InnerException.Message;
             }
             return false;
         }

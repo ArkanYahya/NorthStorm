@@ -24,7 +24,8 @@ namespace NorthStorm.Data
         public DbSet<Status> Statuses { get; set; }
         public DbSet<JobTransfer> JobTransfers { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+       //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<Employee>().ToTable("Employee");
         //    //modelBuilder.Entity<EmployeeRecruitment>().ToTable("EmployeeRecruitment");

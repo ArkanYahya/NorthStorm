@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
+using NorthStorm.Models.Validations;
 
 namespace NorthStorm.Models
 {
@@ -15,6 +16,8 @@ namespace NorthStorm.Models
         // يتم استخدام الادخال اليديوي 
         // يستخدم لتحديد الاسم الذي سيظهر فيه الحقل للمستخدم Display(Name =
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None), Display(Name = "رقم الموظف")]
+        [EmployeeIdValidation]
+        //[Unique(ErrorMessage = "رقم الموظف هذا موجود بالفعل !!")]
         public int Id { get; set; }
 
         // Required يستخدم للحقول المطلوبة ولا يمكن ادخال البيانات دون اعطاء قيمة لها
