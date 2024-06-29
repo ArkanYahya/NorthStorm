@@ -81,8 +81,6 @@ namespace NorthStorm.Repositories
         }
 
 
-
-
         private List<Employee> DoSort(List<Employee> items, string SortProperty, SortOrder sortOrder)
         {
             switch (SortProperty)

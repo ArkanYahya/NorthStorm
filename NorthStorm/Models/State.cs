@@ -8,13 +8,12 @@ namespace NorthStorm.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } // Pending, Approved, Rejected, HasErrors  نماذج من القيم 
         #endregion
 
         #region Navigation Properties
         public ICollection<Employee> Employees { get; set; }
         public ICollection<Recruitment> Recruitments { get; set;}
-        //public ICollection<EmployeeRecruitment> employeeRecruitments { get; set; }
 
         #endregion
     }

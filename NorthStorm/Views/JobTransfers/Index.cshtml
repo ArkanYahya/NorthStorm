@@ -1,19 +1,18 @@
-﻿@model IEnumerable<NorthStorm.Models.Recruitment>
+﻿@model IEnumerable<NorthStorm.Models.JobTransfer>
 
 @using NorthStorm.Models.ViewModels;
 
 @{
-    ViewData["Title"] = "التعيينات - الأوامر الإدارية";
+    ViewData["Title"] = "التنقلات - النقل الداخلي";
     SortModel sortModel = (SortModel)ViewData["sortModel"];
     PagerModel pager = ViewBag.Pager;
 }
-
 
 <h3>@ViewData["Title"]</h3>
 <hr />
 
 <p dir="ltr">
-    <a asp-action="CreateMaster" class="h5">
+    <a asp-action="CreateMasterDetails" class="h5">
         قيد جديد
     </a>
 </p>
@@ -52,6 +51,12 @@
                     @Html.DisplayNameFor(model => model.EmployeeCount)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.TransferFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TransferTo)
+                </th>
+                <th>
 
                 </th>
             </tr>
@@ -60,7 +65,7 @@
             @foreach (var item in Model)
             {
                 string selectedRow = "";
-                if (item.Id == (int?)ViewData["RecruitmentId"])
+                if (item.Id == (int?)ViewData["JobTransferId"])
                 {
                     selectedRow = "table-success";
                 }
@@ -78,37 +83,44 @@
                         @Html.DisplayFor(modelItem => item.Employees.Count)
                     </td>
                     <td>
-                            <a asp-action="Index"
-                               asp-route-selectedId="@item.Id"
-                               asp-route-pg="@pager.CurrentPage"
-                               asp-route-pageSize="@pager.PageSize"
-                               asp-route-SearchText="@ViewData["SearchText"]"
-                               asp-route-sortExpression="@sortModel.SortedExpression">
+                        @Html.DisplayFor(modelItem => item.TransferFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferTo)
+                    </td>
+                    <td>
+                        <a asp-action="Index"
+                           asp-route-selectedId="@item.Id"
+                           asp-route-pg="@pager.CurrentPage"
+                           asp-route-pageSize="@pager.PageSize"
+                           asp-route-SearchText="@ViewData["SearchText"]"
+                           asp-route-sortExpression="@sortModel.SortedExpression">
 
-                                <span class="btn btn-sm btn-outline-primary">
-                                    <i class="fa fa-eye" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض التفاصيل"></i>
-                                </span>
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.Id">
-                                <span class="btn btn-sm btn-outline-warning">
-                                    <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
-                                </span>
-                            </a>
-                            <a asp-action="CreateDetails" asp-route-SelectedRecruitment="@item.Id">
-                                <span class="btn btn-sm btn-outline-info">
-                                    <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="إضافة موظف"></i>
-                                </span>
-                            </a>
-                            @if (item.Employees.Count == 0)
-                            {
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">
-                                    <span class="btn btn-sm btn-outline-danger">
-                                        <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الأمر"></i>
-                                    </span>
-                                </a>
-                            }
+                            <span class="btn btn-sm btn-outline-primary">
+                                <i class="fa fa-eye" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض التفاصيل"></i>
+                            </span>
+                        </a>
+                        <a asp-action="EditMasterDetails" asp-route-id="@item.Id">
+                            <span class="btn btn-sm btn-outline-warning">
+                                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
+                            </span>
+                        </a>
+                        @*                         <a asp-action="CreateDetails" asp-route-SelectedJobTransfer="@item.Id">
+                    <span class="btn btn-sm btn-outline-primary">
+                    <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="إضافة موظف"></i>
+                    </span>
+                    </a> *@
+                        @*          @if (item.Employees.Count == 0)
+                    { *@
+                        <a asp-action="DeleteMasterDetails" asp-route-id="@item.Id" class="text-danger">
+                            <span class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الأمر"></i>
+                            </span>
+                        </a>
+                        @* } *@
 
                     </td>
+
                 </tr>
             }
         </tbody>
@@ -125,12 +137,12 @@
 }
 
 @{
-    int? x = (int?)ViewData["RecruitmentId"];
+    int? x = (int?)ViewData["JobTransferId"];
 
     @if (x != null)
     {
         int index;
-        index = (int)ViewData["RecruitmentId"];
+        index = (int)ViewData["JobTransferId"];
         if (Model.Single(x => x.Id == index).Employees != null)
         {
             if (Model.Single(x => x.Id == index).Employees.Count > 0)
@@ -164,16 +176,6 @@
                                         @item.FullName
                                     </td>
                                     <td>
-                                        <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id">
-                                            <span class="btn btn-sm btn-outline-primary">
-                                                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الموظف"></i>
-                                            </span>
-                                        </a>
-                                        <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id">
-                                            <span class="btn btn-sm btn-outline-danger">
-                                                <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الموظف"></i>
-                                            </span>
-                                        </a>
                                     </td>
                                 </tr>
                             }

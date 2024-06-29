@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NorthStorm.Data;
 
@@ -11,9 +12,11 @@ using NorthStorm.Data;
 namespace NorthStorm.Migrations
 {
     [DbContext(typeof(NorthStormContext))]
-    partial class NorthStormContextModelSnapshot : ModelSnapshot
+    [Migration("20240609190507_update2")]
+    partial class update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,11 +173,11 @@ namespace NorthStorm.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TransferFrom")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TransferFrom")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TransferTo")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TransferTo")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

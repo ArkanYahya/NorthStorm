@@ -24,8 +24,12 @@ namespace NorthStorm.Data
         public DbSet<Status> Statuses { get; set; }
         public DbSet<JobTransfer> JobTransfers { get; set; }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder
+        //    .UseSqlServer(@"<Server=(localdb)\\mssqllocaldb;Database=NorthStormContextDB;Trusted_Connection=True;MultipleActiveResultSets=true>", o => o.UseCompatibilityLevel(120));
 
-       //protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<Employee>().ToTable("Employee");
         //    //modelBuilder.Entity<EmployeeRecruitment>().ToTable("EmployeeRecruitment");

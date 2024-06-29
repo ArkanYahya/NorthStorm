@@ -7,7 +7,7 @@ using NorthStorm.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NorthStormContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("NorthStormContext") ?? throw new InvalidOperationException("Connection string 'NorthStormContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NorthStormContext") ?? throw new InvalidOperationException("Connection string 'NorthStormContext' not found."), o => o.UseCompatibilityLevel(120)));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'NorthStormContext' not found.");
@@ -24,6 +24,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IRecruitment, RecruitmentRepo>();
 builder.Services.AddScoped<IEmployee, EmployeeRepo>();
+builder.Services.AddScoped<IJobTransfer, JobTransferRepo>();
+
 
 // اضافة
 // The AddDatabaseDeveloperPageExceptionFilter

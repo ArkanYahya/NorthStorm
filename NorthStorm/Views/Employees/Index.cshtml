@@ -13,7 +13,7 @@
 
 <p>
     <a asp-action="Create" class="d-flex justify-content-end h5">
-        موظف جديد
+        قيد جديد
     </a>
 </p>
 <div class="card bg-light mb-3">
@@ -120,12 +120,12 @@
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-Id="@item.Id">
-                            <span class="btn btn-sm btn-outline-dark">
+                            <span class="btn btn-sm btn-outline-primary">
                                 <i class="fa fa-eye" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض التفاصيل"></i>
                             </span>
                         </a>
                         <a asp-action="Edit" asp-route-id="@item.Id">
-                            <span class="btn btn-sm btn-outline-primary">
+                            <span class="btn btn-sm btn-outline-warning">
                                 <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
                             </span>
                         </a>

@@ -1,6 +1,6 @@
 ﻿namespace NorthStorm.Models
 {
-    public class TableRow
+    public class SecurityProperties
     {
 
         #region Security Properties
@@ -25,6 +25,15 @@
         // لبيان حالة القيد
         // pending, approved, rejected
         public State State { get; set; }
+
+        public String ApprovedBy { get; set; }
+
+        public String CreatedBy { get; set; }
+
+        public String UpdatedBy { get; set;}
+
+        public String DeletedBy { get; set; }
+        public bool IsDeleted { get; set; }
 
         #endregion
     }
