@@ -7,6 +7,7 @@ using NorthStorm.Interfaces;
 using NorthStorm.Models;
 using NorthStorm.Models.ViewModels;
 using NorthStorm.Repositories;
+using NorthStorm.Services;
 using NorthStorm.ViewModels;
 
 namespace NorthStorm.Controllers
@@ -15,11 +16,13 @@ namespace NorthStorm.Controllers
     {
         private readonly NorthStormContext _context;
         private readonly IJobTransfer _JobTransferRepo;
+        //private readonly LevelService _levelService;
 
         public JobTransfersController(NorthStormContext context, IJobTransfer jobTransferRepo)
         {
             _context = context;
             _JobTransferRepo = jobTransferRepo;
+            //_levelService = levelService;
         }
 
         // GET: JobTransfers
@@ -28,7 +31,7 @@ namespace NorthStorm.Controllers
             string sortExpression = "",
             string SearchText = "",
             int pg = 1,
-            int pageSize = 5)
+            int pageSize = 10)
         {
             SortModel sortModel = new SortModel();
             sortModel.AddColumn("Id");
@@ -75,15 +78,16 @@ namespace NorthStorm.Controllers
 
 
         // GET: JobTransfer/CreateMasterDetails
-        public IActionResult CreateMasterDetails()
+        public IActionResult Create()
         {
+            PopulateLevelList();
             return View();
         }
 
         // POST: JobTransfer/CreateMasterDetails
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateMasterDetails([Bind("ReferenceNo, ReferenceDate, Subject, TransferFrom, TransferTo, EmployeeIds")] JobTransferCreateViewModel model)
+        public async Task<IActionResult> Create([Bind("ReferenceNo, ReferenceDate, Subject, DestinationLevelId, EmployeeIds")] JobTransferCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -95,8 +99,7 @@ namespace NorthStorm.Controllers
                     ReferenceNo = model.ReferenceNo,
                     ReferenceDate = model.ReferenceDate,
                     Subject = model.Subject,
-                    TransferFrom = model.TransferFrom,
-                    TransferTo = model.TransferTo,
+                    DestinationLevelId = model.DestinationLevelId,
                     Employees = await _context.Employees
                                              .Where(e => model.EmployeeIds.Contains(e.Id))
                                              .ToListAsync()
@@ -115,6 +118,7 @@ namespace NorthStorm.Controllers
                 {
                     errMessage = errMessage + " " + _JobTransferRepo.GetErrors();
 
+                    PopulateLevelList(jobTransfer.DestinationLevelId);
                     TempData["ErrorMessage"] = errMessage;
                     ModelState.AddModelError("JobTransfersCreate_POST", errMessage);
 
@@ -128,6 +132,7 @@ namespace NorthStorm.Controllers
             }
             else
             {
+                PopulateLevelList(model.DestinationLevelId);
                 TempData["ErrorMessage"] = "البيانات المدخلة غير صحيحة";
                 return View(model);
             }
@@ -135,7 +140,7 @@ namespace NorthStorm.Controllers
 
 
         // GET: JobTransfers/Edit/5
-        public async Task<IActionResult> EditMasterDetails(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -157,15 +162,14 @@ namespace NorthStorm.Controllers
                 ReferenceNo = jobTransfer.ReferenceNo,
                 ReferenceDate = jobTransfer.ReferenceDate,
                 Subject = jobTransfer.Subject,
-                TransferFrom = jobTransfer.TransferFrom,
-                TransferTo = jobTransfer.TransferTo,
+                DestinationLevelId = jobTransfer.DestinationLevelId,
                 Employees = jobTransfer.Employees.Select(e => new EmployeesInfo
                 {
                     EmployeeId = e.Id,
                     FullName = $"{e.FirstName} {e.MiddleName} {e.LastName} {e.FourthName} {e.SurName}"
                 }).ToList()
             };
-
+            PopulateLevelList(model.DestinationLevelId);
             return View(model);
         }
 
@@ -174,7 +178,7 @@ namespace NorthStorm.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMasterDetails(int id, [Bind("JobTransferId,ReferenceNo,ReferenceDate,Subject, TransferFrom, TransferTo, Employees")] JobTransferEditViewModel model)
+        public async Task<IActionResult> Edit(int id, [Bind("JobTransferId,ReferenceNo,ReferenceDate,Subject, DestinationLevelId, Employees")] JobTransferEditViewModel model)
         {
             if (id != model.JobTransferId)
             {
@@ -199,16 +203,15 @@ namespace NorthStorm.Controllers
                     jobTransfer.ReferenceNo = model.ReferenceNo;
                     jobTransfer.ReferenceDate = model.ReferenceDate;
                     jobTransfer.Subject = model.Subject;
-                    jobTransfer.TransferFrom = model.TransferFrom;
-                    jobTransfer.TransferTo = model.TransferTo;
+                    jobTransfer.DestinationLevelId = model.DestinationLevelId;
 
                     // Update the related employees
                     jobTransfer.Employees.Clear();
                     jobTransfer.Employees = await _context.Employees
-                                                          .Where(e => model.Employees.Select(e=>e.EmployeeId).Contains(e.Id))
+                                                          .Where(e => model.Employees.Select(e => e.EmployeeId).Contains(e.Id))
                                                           .ToListAsync();
                     _context.Update(jobTransfer);
-                    IsEdited = await _context.SaveChangesAsync()> 0 ;
+                    IsEdited = await _context.SaveChangesAsync() > 0;
                     //IsEdited = await _JobTransferRepo.Edit(jobTransfer);
                 }
                 catch (Exception ex)
@@ -222,7 +225,7 @@ namespace NorthStorm.Controllers
 
                     TempData["ErrorMessage"] = errMessage;
                     ModelState.AddModelError("JobTransfersEdit_POST", errMessage);
-
+                    PopulateLevelList(model.DestinationLevelId);
                     return View(model);
                 }
                 else
@@ -234,13 +237,14 @@ namespace NorthStorm.Controllers
             else
             {
                 TempData["ErrorMessage"] = "البيانات المدخلة غير صالحة";
+                PopulateLevelList(model.DestinationLevelId);
 
                 return View(model);
             }
         }
 
         // GET: JobTransfers/DeleteMasterDetails/5
-        public async Task<IActionResult> DeleteMasterDetails(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -253,12 +257,14 @@ namespace NorthStorm.Controllers
             {
                 return NotFound();
             }
+            
+            PopulateLevelList(jobTransfer.DestinationLevelId);
 
             return View(jobTransfer);
         }
 
         // POST: JobTransfers/DeleteMasterDetails/5
-        [HttpPost, ActionName("DeleteMasterDetails")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(JobTransfer jobTransfer)
         {
@@ -312,6 +318,15 @@ namespace NorthStorm.Controllers
                                     })
                                     .ToList();
             return Json(employees);
+        }
+
+        private void PopulateLevelList(object selectedLevel = null)
+        {
+            var levelsQuery = from l in _context.Levels
+                               orderby l.Name
+                               select l;
+            ViewBag.LevelId = new SelectList(levelsQuery.AsNoTracking(), "Id", "Name", selectedLevel);
+
         }
     }
 

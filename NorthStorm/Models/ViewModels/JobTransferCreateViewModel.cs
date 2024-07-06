@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NorthStorm.Models.Assistants;
 
 namespace NorthStorm.Models.ViewModels
 {
+
+#warning try to use inheritance for shared properties
     public class JobTransferCreateViewModel
     {
         [Required, Display(Name = "العدد")]
@@ -10,10 +13,9 @@ namespace NorthStorm.Models.ViewModels
         public DateTime ReferenceDate { get; set; }
         [Required, Display(Name = "الموضوع")]
         public string Subject { get; set; }
-        [Display(Name = "نقل من")]
-        public string TransferFrom { get; set; }
+        public int? DestinationLevelId { get; set; }
         [Display(Name = "نقل إلى")]
-        public string TransferTo { get; set; }
+        public Level DestinationLevel { get; set; }
         public List<int> EmployeeIds { get; set; }
     }
 

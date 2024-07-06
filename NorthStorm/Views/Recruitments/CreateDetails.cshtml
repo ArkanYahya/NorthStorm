@@ -15,7 +15,7 @@
 
 <form asp-action="CreateDetails">
     <div class="card bg-light mb-3">
-        <div class="card-header">بيانات الأمر الإداري</div>
+        <div class="card-header">بيانات القيد</div>
         <div class="card-body">
             <div class="row col-md-12">
                 <input type="hidden" asp-for="Id" />
@@ -35,7 +35,6 @@
                     <span asp-validation-for="Subject" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 align-self-end text-md-center">
-                  
                 </div>
             </div>
         </div>
@@ -44,38 +43,6 @@
         </div>
     </div>
 
-@*         <div class="card bg-light mb-3">
-        <div class="card-header">الموظفين الغير مرتبطين بأوامر تعيين</div>
-        <div class="card-body">
-            <div class="row col-md-12">
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group col-md-2">
-                    <label asp-for="@emp.First().FullName" class="control-label"></label>
-                    <select asp-for="@emp.First().Id" class="form-control" asp-items="ViewBag.empId" name="Employees[0].empId">
-                        <option value="">-- إختر الموظف --</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="@emp.Count" class="control-label"></label>
-                    <input asp-for="@emp.Count" class="form-control" readonly />
-                    <span asp-validation-for="@emp.Count" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-2">
-
-                </div>
-                <div class="form-group col-md-4">
-
-                </div>
-                <div class="form-group col-md-2 align-self-end text-md-center">
-                  
-                </div>
-            </div>
-        </div>
-        <div class="card-footer">
-            <br />
-        </div>
-    </div>
- *@
     <div class="card bg-light mb-3">
         <div class="card-header">المعلومات الرئيسية</div>
         <div class="card-body">
@@ -83,7 +50,7 @@
             <div class="row col-md-12">
                 <div class="form-group col-md-2">
                     <label asp-for="Employees.LastOrDefault().Id" class="control-label"></label>
-                    <input asp-for="Employees.LastOrDefault().Id" class="form-control" name="Employees[0].Id"/>
+                    <input asp-for="Employees.LastOrDefault().Id" class="form-control" name="Employees[0].Id" />
                     <span asp-validation-for="Employees.LastOrDefault().Id" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2">
@@ -196,6 +163,30 @@
             <br />
 
         </div>
+    </div>
+
+    <div class="card bg-light mb-3">
+        <div class="card-header">المعلومات الوظيفية</div>
+        <div class="table card-body">
+            <div class="row col-md-12">
+                <div class="form-group col-md-2">
+@*                     <label asp-for="Employees.LastOrDefault().jo.JobTitles" class="control-label"></label>
+                     <select asp-for="Employees.LastOrDefault().JobTitleId" class="form-control" asp-items="ViewBag.JobTitleId" name="Employees[0].JobTitle.JobTitleId">
+                        <option value="">-- إختر العنوان الوظيفي --</option>
+                    </select>
+                </div>
+                 <div class="form-group col-md-2">
+                    <label asp-for="Employees.LastOrDefault().Level" class="control-label"></label>
+                    <select asp-for="Employees.LastOrDefault().LevelId" class="form-control" asp-items="ViewBag.LevelId" name="Employees[0].Level.LevelId">
+                        <option value="">-- إختر موقع العمل الهرمي --</option>
+                    </select>
+                </div> *@
+
+            </div>
+
+        </div>
+        <div class="card-footer" style="height:50px"></div>
+
     </div>
 </form>
 

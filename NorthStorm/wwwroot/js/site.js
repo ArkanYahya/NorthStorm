@@ -90,6 +90,7 @@ function openSuccessModal(strMessage) {
     $('#myModalSuccess').modal('show');
 }
 
+
 function AddItem(btn) {
 
     var table;
@@ -217,13 +218,13 @@ function CalcCount() {
     var txttotalCount = document.getElementById('txtQtyTotal');
     txttotalCount.value = totalCount;
 
-   return;
+    return;
 }
 
 function CalcTotals() {
 
     var x = document.getElementsByClassName('QtyTotal');
-        var totalQty = 0;
+    var totalQty = 0;
 
 
     var totalQty = 0;

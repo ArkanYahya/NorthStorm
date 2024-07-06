@@ -15,13 +15,11 @@ namespace NorthStorm.Repositories
             return _errors;
         }
 
-
         private readonly NorthStormContext _context; // for connecting to efcore.
         public EmployeeRepo(NorthStormContext context) // will be passed by dependency injection.
         {
             _context = context;
         }
-
 
         public async Task<bool> Create(Employee employee)
         {
@@ -40,7 +38,6 @@ namespace NorthStorm.Repositories
             return false;
         }
 
-
         public async Task<bool> Delete(Employee employee)
         {
             _errors = "";
@@ -58,7 +55,6 @@ namespace NorthStorm.Repositories
             }
             return false;
         }
-
 
         public async Task<bool> Edit(Employee employee)
         {
@@ -126,6 +122,8 @@ namespace NorthStorm.Repositories
                     .Include(e => e.race)
                     .Include(e => e.religion)
                     .Include(e => e.status)
+                    //.Include(e => e.JobTitle)
+                    //.Include(e => e.Level)
                     .AsNoTracking()
                     .ToListAsync();
             }
@@ -137,6 +135,8 @@ namespace NorthStorm.Repositories
                     .Include(e => e.race)
                     .Include(e => e.religion)
                     .Include(e => e.status)
+                    //.Include(e => e.JobTitle)
+                    //.Include(e => e.Level)
                     .AsNoTracking()
                     .ToListAsync();
             }

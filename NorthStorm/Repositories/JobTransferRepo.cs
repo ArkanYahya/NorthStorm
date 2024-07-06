@@ -145,6 +145,7 @@ namespace NorthStorm.Repositories
                 n.ReferenceNo.Contains(SearchText) ||
                 n.Subject.Contains(SearchText))
                     .Include(s => s.Employees)
+                    .Include(l => l.DestinationLevel)
                     .AsNoTracking()
                     .ToListAsync();
             }
@@ -152,6 +153,7 @@ namespace NorthStorm.Repositories
             {
                 items = await _context.JobTransfers
                     .Include(s => s.Employees)
+                    .Include(l => l.DestinationLevel)
                     .AsNoTracking()
                     .ToListAsync();
             }

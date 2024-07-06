@@ -14,7 +14,7 @@
 
 <p dir="ltr">
     <a asp-action="CreateMaster" class="h5">
-        قيد جديد
+        إنشاء قيد
     </a>
 </p>
 
@@ -94,7 +94,7 @@
                                     <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
                                 </span>
                             </a>
-                            <a asp-action="CreateDetails" asp-route-SelectedRecruitment="@item.Id">
+                            <a asp-action="CreateView" asp-route-SelectedRecruitment="@item.Id">
                                 <span class="btn btn-sm btn-outline-info">
                                     <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="إضافة موظف"></i>
                                 </span>
@@ -166,12 +166,12 @@
                                     <td>
                                         <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id">
                                             <span class="btn btn-sm btn-outline-primary">
-                                                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الموظف"></i>
+                                                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل القيد"></i>
                                             </span>
                                         </a>
                                         <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id">
                                             <span class="btn btn-sm btn-outline-danger">
-                                                <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الموظف"></i>
+                                                <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف القيد"></i>
                                             </span>
                                         </a>
                                     </td>

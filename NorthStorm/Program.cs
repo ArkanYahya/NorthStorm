@@ -4,6 +4,10 @@ using NorthStorm.Data;
 using Microsoft.Extensions.DependencyInjection;
 using NorthStorm.Interfaces;
 using NorthStorm.Repositories;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Authentication;
+using NorthStorm.Interfaces.Classifications;
+using NorthStorm.Repositories.Classifications;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NorthStormContext>(options =>
@@ -22,9 +26,20 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddScoped<IRecruitment, RecruitmentRepo>();
+
+builder.Services.AddScoped<IGender, GenderRepo>();
+builder.Services.AddScoped<IJobTitleClassification, JobTitleClassificationRepo>();
+builder.Services.AddScoped<ILocationClassification, LocationClassificationRepo>();
+builder.Services.AddScoped<INationality, NationalityRepo>();
+builder.Services.AddScoped<IRace, RaceRepo>();
+builder.Services.AddScoped<IReligion, ReligionRepo>();
+
 builder.Services.AddScoped<IEmployee, EmployeeRepo>();
+builder.Services.AddScoped<IGrade, GradeRepo>();
+builder.Services.AddScoped<IJobTitle, JobTitleRepo>();
 builder.Services.AddScoped<IJobTransfer, JobTransferRepo>();
+builder.Services.AddScoped<ILocation, LocationRepo>();
+builder.Services.AddScoped<IRecruitment, RecruitmentRepo>();
 
 
 // اضافة

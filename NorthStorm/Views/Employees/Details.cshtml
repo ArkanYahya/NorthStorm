@@ -1,7 +1,8 @@
 ﻿@model NorthStorm.Models.Employee
 
 @{
-    ViewData["Title"] = "تفاصيل موظف";
+    string pageTitle = "جدول الموظفين";
+    ViewData["Title"] = pageTitle + " / " + "تفاصيل موظف";
     string serverPath = "/Photos/" + Model.Id + ".jpg";
     var localPath = Directory.GetCurrentDirectory() + "\\wwwroot\\Photos\\" + Model.Id + ".jpg";
     if (!File.Exists(localPath))

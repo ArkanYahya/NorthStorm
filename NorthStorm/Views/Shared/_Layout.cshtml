@@ -227,6 +227,121 @@
                                 <li><a class="nav-link text-black" href="#">و. مخزن الأرزاق المركزي</a></li>
                             </ul>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="test nav-link text-black" href="#" aria-expanded="false">
+                                إدارة النظام
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        الإعدادات العامة
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Locations" asp-action="Index">المواقع الجغرافية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="GovernmentalInstitutes" asp-action="Index">المؤسسات الحكومية</a></li>
+                                        <li><a class="nav-link text-black" href="#">...</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        الإعدادات الوظيفية
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Levels" asp-action="Index">الهيكل التنظيمي</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="JobTitles" asp-action="Index">العناوين الوظيفية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Grades" asp-action="Index">الدرجات والمراحل</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        التصنيفات الأساسية
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="JobTitleClassifications" asp-action="Index">تصنيفات العناوين الوظيفية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="LocationClassifications" asp-action="Index">تصنيفات المواقع الجغرافية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Genders" asp-action="Index">تصنيفات الجنس</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Races" asp-action="Index">تصنيفات القومية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Nationalities" asp-action="Index">تصنيفات الجنسية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Religions" asp-action="Index">تصنيفات الديانة</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="test nav-link text-black" href="#" aria-expanded="false">
+                                قاعدة الترميز
+                                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        الترميز العام
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Ministries" asp-action="Index">وزارات الدولة</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="StatOffices" asp-action="Index">الدوائر والمؤسسات</a></li>
+
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Locations" asp-action="Index">الموقع الجغرافي</a></li>
+                                        <li><a class="nav-link text-black" href="#">الاقضية</a></li>
+
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Countries" asp-action="Index">الدول العربية والاجنبية</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        الموارد البشرية
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Grades" asp-action="Index">الدرجات والرواتب</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Certificates" asp-action="Index">الشهادات الدراسية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Universities" asp-action="Index">الجامعات والمؤسسات التعليمية</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="CollegeInst" asp-action="Index">الكليات والمعاهد</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Specializ" asp-action="Index">التخصصات الدراسية</a></li>
+                                        <li><a class="nav-link text-black" >العناوين الوظيفية</a></li>
+                                        <li><a class="nav-link text-black" href="#">المهن والدور الوظيفي</a></li>
+                                        <li><a class="nav-link text-black" asp-area="" asp-controller="Divs" asp-action="Index">هيئات الشركة</a></li>
+                                        <li><a class="nav-link text-black" href="#">التشكرات والمكافئات</a></li>
+                                        <li><a class="nav-link text-black" href="#">العقوبات والتضمين</a></li>
+                                        <li><a class="nav-link text-black" href="#">الشهادات والاختصاصات</a></li>
+                                        <li><a class="nav-link text-black" href="#">المخصصات والحوافز</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        التدريب والتطوير
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="nav-link text-black" href="#">الدورات </a></li>
+                                        <li><a class="nav-link text-black" href="#">الايفادات</a></li>
+                                        <li><a class="nav-link text-black" href="#">التدريب</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropend">
+                                    <a class="nav-link text-black" href="#" aria-expanded="false">
+                                        العلاقات العامة
+                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu text-black">
+                                        <li><a class="nav-link text-black" href="#">الايفاد الداخلي</a></li>
+                                        <li><a class="nav-link text-black" href="#">الهويات</a></li>
+                                        <li><a class="nav-link text-black" href="#">نادي عرفة</a></li>
+                                    </ul>
+                                </li>
+                                <li><a class="nav-link text-black" href="#">الشعبة الرياضية</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -271,7 +386,7 @@
 
                         <div class="modal-footer">
                             &nbsp;
-                            <button type="button" class="btn btn-info" data-bs-dismiss="modal" action="dispose">إغلاق</button>
+                            <button id="alertCloseButton" type="button" class="btn btn-info" data-bs-dismiss="modal" action="dispose">إغلاق</button>
                         </div>
 
                     </div>

@@ -1,7 +1,7 @@
 ﻿@model NorthStorm.Models.Recruitment
 
 @{
-    ViewData["Title"] = "قيد جديد";
+    ViewData["Title"] = "إنشاء قيد";
 }
 
 <h3>@ViewData["Title"]</h3>
@@ -9,8 +9,8 @@
 
 
 <div class="card bg-light mb-3">
-    <div class="card-header">بيانات الأمر الإداري</div>
-    <form asp-action="Edit" class="card-body">
+    <div class="card-header">بيانات القيد</div>
+    <form asp-action="CreateMaster" class="card-body">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="row col-md-12">

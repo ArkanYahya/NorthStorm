@@ -1,0 +1,31 @@
+﻿@model NorthStorm.Models.Assistants.Level
+
+@{
+    ViewData["Title"] = "Create Level";
+}
+
+<h1>Create Level</h1>
+
+<div>
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ParentLevelId" class="control-label">Parent Level</label>
+            <select asp-for="ParentLevelId" class="form-control">
+                <option value="">Select Parent Level</option>
+                @foreach (var level in ViewBag.ParentLevels)
+                {
+                    <option value="@level.Value">@level.Text</option>
+                }
+            </select>
+            <span asp-validation-for="ParentLevelId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

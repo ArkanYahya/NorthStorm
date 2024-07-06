@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NorthStorm.Models;
 using System.Diagnostics;
+using NorthStorm.Models.Assistants;
 
 namespace NorthStorm.Controllers
 {

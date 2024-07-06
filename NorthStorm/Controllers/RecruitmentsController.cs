@@ -28,7 +28,7 @@ namespace NorthStorm.Controllers
             string sortExpression = "",
             string SearchText = "",
             int pg = 1,
-            int pageSize = 5)
+            int pageSize = 10)
         {
             SortModel sortModel = new SortModel();
             sortModel.AddColumn("Id");
@@ -208,16 +208,9 @@ namespace NorthStorm.Controllers
 
             recruitment.Employees.Add(new Employee() { BirthDate = DateTime.Now });
 
-            //ICollection<Employee> items = await _context.Employees
-            //    .Where(x=>x.Recruitments.Count == 0)
-            //    .AsNoTracking()
-            //    .ToListAsync();
-            //ViewBag.emps = items;
-            //ViewBag.empId = new SelectList(items, "Id", "Id");
-
-
             return View(recruitment);
         }
+
 
         // POST: Recruitments/CreateDetails
         [HttpPost]
@@ -277,6 +270,99 @@ namespace NorthStorm.Controllers
                 return View(recruitment);
             }
         }
+
+
+
+        public async Task<IActionResult> CreateView(int? SelectedRecruitment)
+        {
+            if (SelectedRecruitment == null)
+            {
+                return NotFound();
+            }
+
+            var recruitment = await _RecruitmentRepo.GetItem((int)SelectedRecruitment);
+
+            if (recruitment == null)
+            {
+                return NotFound();
+            }
+
+            RecruitmentVM viewModel = new RecruitmentVM
+            {
+                Id = recruitment.Id,
+                ReferenceNo = recruitment.ReferenceNo,
+                ReferenceDate = recruitment.ReferenceDate,
+                Subject = recruitment.Subject,
+            };
+
+            PopulateDropDownLists();
+
+            viewModel.Employee.BirthDate = DateTime.Now;
+
+
+            return View(viewModel);
+        }
+
+        // POST: Recruitments/CreateDetails
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateView([Bind("Id,ReferenceNo,ReferenceDate,Subject, Employee, JobTitleId")] RecruitmentVM recruitmentViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bool IsUpdated = false;
+                string errMessage = "";
+
+                try
+                {
+#warning no need to include all employee, add GetItemNoChild 
+                    var selectedRecruitment = await _RecruitmentRepo.GetItem(recruitmentViewModel.Id);
+                    selectedRecruitment.Employees.Add(recruitmentViewModel.Employee);
+
+                    IsUpdated = await _RecruitmentRepo.UpdateView(selectedRecruitment, recruitmentViewModel);
+                }
+                catch (Exception ex)
+                {
+                    errMessage = errMessage + " " + ex.Message;
+                    ModelState.AddModelError("RecruitmentsCreateDetails_POST", ex.Message);
+                }
+
+                if (IsUpdated == false)
+                {
+                    errMessage = errMessage + " " + _RecruitmentRepo.GetErrors();
+
+                    TempData["ErrorMessage"] = errMessage;
+                    ModelState.AddModelError("RecruitmentsCreate_POST", errMessage);
+
+                    PopulateDropDownLists(recruitmentViewModel.Employee.GenderId,
+                        recruitmentViewModel.Employee.NationalityId,
+                        recruitmentViewModel.Employee.RaceId,
+                        recruitmentViewModel.Employee.ReligionId,
+                        recruitmentViewModel.Employee.StatusId);
+
+                    return View(recruitmentViewModel);
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "تمت إضافة الموظف \n" + recruitmentViewModel.Employee.FullName +
+                        "\n على الأمر الإداري ذي العدد \n" + recruitmentViewModel.ReferenceNo +
+                        " في " + recruitmentViewModel.ReferenceDate.ToString("dd/MM/yyyy") + " بنجاح";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "تأكد من صحة البيانات المدخلة";
+                PopulateDropDownLists(recruitmentViewModel.Employee.GenderId,
+                    recruitmentViewModel.Employee.NationalityId,
+                    recruitmentViewModel.Employee.RaceId,
+                    recruitmentViewModel.Employee.ReligionId,
+                    recruitmentViewModel.Employee.StatusId);
+
+                return View(recruitmentViewModel);
+            }
+        }
+
 
         // GET: Recruitments/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -400,7 +486,8 @@ namespace NorthStorm.Controllers
             object selectedNationality = null,
             object selectedRace = null,
             object selectedReiligion = null,
-            object selectedStatus = null
+            object selectedStatus = null,
+            object selectedJobTitle = null
             )
         {
             var gendersQuery = from g in _context.Genders
@@ -418,7 +505,7 @@ namespace NorthStorm.Controllers
                              select r;
             ViewBag.RaceId = new SelectList(racesQuery.AsNoTracking(), "Id", "Name", selectedRace);
 
-            var reiligionsQuery = from n in _context.Religiones
+            var reiligionsQuery = from n in _context.Religions
                                   orderby n.Name
                                   select n;
             ViewBag.ReligionId = new SelectList(reiligionsQuery.AsNoTracking(), "Id", "Name", selectedReiligion);
@@ -428,13 +515,18 @@ namespace NorthStorm.Controllers
                                 select n;
             ViewBag.StatusId = new SelectList(statusesQuery.AsNoTracking(), "Id", "Name", selectedStatus);
 
+            var jobTitlesQuery = from n in _context.JobTitles
+                                 orderby n.Name
+                                 select n;
+            ViewBag.JobTitles = new SelectList(jobTitlesQuery.AsNoTracking(), "Id", "Name", selectedJobTitle);
+
         }
 
         private void PopulateEmployeeDropDownLists(
             object selectedEmp = null)
         {
             var emp = from c in _context.Employees
-                      where c.Recruitments == null
+                      where c.Recruitment == null
                       select c;
             ViewBag.empId = new SelectList(emp.AsNoTracking(), "Id", "Name", selectedEmp);
 

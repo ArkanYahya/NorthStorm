@@ -6,6 +6,7 @@ using NorthStorm.Data;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
+using System.Xml;
 
 namespace NorthStorm.Models.Validations
 {
@@ -20,6 +21,7 @@ namespace NorthStorm.Models.Validations
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             _validationContext = validationContext;
+            var entity = (Employee)validationContext.ObjectInstance;
 
             if (value != null)
             {
@@ -27,9 +29,13 @@ namespace NorthStorm.Models.Validations
                 {
                     return new ValidationResult(GetErrorMessage_Mod());
                 }
-                if (checkEmployeeId_Duplicate(int.Parse(value.ToString())))
+                if (entity.IsCreateAction)
                 {
-                    return new ValidationResult(GetErrorMessage_Duplicate());
+                    if (checkEmployeeId_Duplicate(int.Parse(value.ToString())))
+                    {
+                        return new ValidationResult(GetErrorMessage_Duplicate());
+                    }
+
                 }
             }
             return ValidationResult.Success;

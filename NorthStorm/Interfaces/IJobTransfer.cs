@@ -10,10 +10,10 @@ namespace NorthStorm.Interfaces
         Task<PaginatedList<JobTransfer>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5);
         Task<JobTransfer> GetItem(int id); // read particular item
 
-        Task<bool> Create(JobTransfer jobTransfer);
-        Task<bool> Edit(JobTransfer jobTransfer);
-        Task<bool> Delete(JobTransfer jobTransfer);
-        Task<bool> Update(JobTransfer jobTransfer);
+        Task<bool> Create(JobTransfer item);
+        Task<bool> Edit(JobTransfer item);
+        Task<bool> Delete(JobTransfer item);
+        Task<bool> Update(JobTransfer item);
 
     }
 }

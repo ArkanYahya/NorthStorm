@@ -3,7 +3,8 @@
 @using NorthStorm.Models.ViewModels;
 
 @{
-    ViewData["Title"] = "التنقلات - النقل الداخلي";
+    string pageTitle = "النقل الداخلي";
+    ViewData["Title"] = pageTitle;
     SortModel sortModel = (SortModel)ViewData["sortModel"];
     PagerModel pager = ViewBag.Pager;
 }
@@ -12,8 +13,8 @@
 <hr />
 
 <p dir="ltr">
-    <a asp-action="CreateMasterDetails" class="h5">
-        قيد جديد
+    <a asp-action="Create" class="h5">
+        إنشاء قيد
     </a>
 </p>
 
@@ -51,13 +52,9 @@
                     @Html.DisplayNameFor(model => model.EmployeeCount)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TransferFrom)
+                    @Html.DisplayNameFor(model => model.DestinationLevelId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TransferTo)
-                </th>
-                <th>
-
                 </th>
             </tr>
         </thead>
@@ -80,13 +77,16 @@
                         @Html.DisplayFor(modelItem => item.Subject)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Employees.Count)
+                        @(item.Employees == null
+                            ? null
+                            : @Html.DisplayFor(modelItem => item.Employees.Count)
+                            )
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TransferFrom)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransferTo)
+                        @(item.DestinationLevel == null
+                            ? null
+                            : @Html.DisplayFor(modelItem => item.DestinationLevel.Name)
+                            )
                     </td>
                     <td>
                         <a asp-action="Index"
@@ -100,25 +100,16 @@
                                 <i class="fa fa-eye" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض التفاصيل"></i>
                             </span>
                         </a>
-                        <a asp-action="EditMasterDetails" asp-route-id="@item.Id">
+                        <a asp-action="Edit" asp-route-id="@item.Id">
                             <span class="btn btn-sm btn-outline-warning">
                                 <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الأمر"></i>
                             </span>
                         </a>
-                        @*                         <a asp-action="CreateDetails" asp-route-SelectedJobTransfer="@item.Id">
-                    <span class="btn btn-sm btn-outline-primary">
-                    <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="إضافة موظف"></i>
-                    </span>
-                    </a> *@
-                        @*          @if (item.Employees.Count == 0)
-                    { *@
-                        <a asp-action="DeleteMasterDetails" asp-route-id="@item.Id" class="text-danger">
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger">
                             <span class="btn btn-sm btn-outline-danger">
                                 <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الأمر"></i>
                             </span>
                         </a>
-                        @* } *@
-
                     </td>
 
                 </tr>

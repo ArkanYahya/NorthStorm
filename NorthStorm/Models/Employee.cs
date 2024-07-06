@@ -3,12 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
 using NorthStorm.Models.Validations;
+using NorthStorm.Models.Assistants;
+using NorthStorm.Models.Classifications;
 
 namespace NorthStorm.Models
 {
     public class Employee
     {
-
         #region Class Properties
         // يستخدم ليكون الحقل مفتاح رئيسي في الجدول Key
         // فسيعرفه النظام تلقائيا كمفتاح رئيسي EmployeeId أو Id علما انه في حال كان اسم الحقل هو كلمة
@@ -22,7 +23,7 @@ namespace NorthStorm.Models
 
         // Required يستخدم للحقول المطلوبة ولا يمكن ادخال البيانات دون اعطاء قيمة لها
         // StringLength(50, MinimumLength = 3) تحديد اعلى واقل قيمة يمكن ادخالها في الحقل
-        [Required(ErrorMessage ="يرجى ادخال الاسم الأول"), Display(Name = "الاسم الاول")]
+        [Required(ErrorMessage = "يرجى ادخال الاسم الأول"), Display(Name = "الاسم الاول")]
         public string FirstName { get; set; }
 
 
@@ -69,32 +70,6 @@ namespace NorthStorm.Models
         [Display(Name = "رقم IBAN"), DisplayFormat(NullDisplayText = "غير مخصص")]
         public string IBAN { get; set; }
 
-        // ******************************** Foreign Keys **************************************
-        // وهي حقول المفاتيح الاساسية الخاصة بجداول اخرى
-        // إن وجود مفتاح خارجي في النموذج على الرغم من وجود خاصية التنقل تسهل عملية التعديل وتجعلها اكثر كفائة
-        // فعندما تقوم بتحميل موظف ليتم التعديل عليه، تكون قيمة خاصية التنقل للجنس غيرة معرفة ان لم تقم بتحميلها
-        // لذا عليك تحميل الحقل الخاص من جدول الجنس اولا
-        // بينما وجود المفتاح الخارجي في النموذج يمكنك من التعديل على الموظف دون تحميل كافة الحقول الخارجية
-        [Display(Name = "الجنس")]
-        public int GenderId { get; set; }       // Foreign Key
-
-
-        [Display(Name = "الديانة")]
-        public int ReligionId { get; set; }     // Foreign Key
-
-
-        [Display(Name = "القومية")]
-        public int RaceId { get; set; }         // Foreign Key
-
-
-        [Display(Name = "الجنسية")]
-        public int NationalityId { get; set; }  // Foreign Key
-
-
-        [Display(Name = "الحالة")]
-        public int StatusId { get; set; }       // Foreign Key
-
-
         // *****************************  الخصائص مع تخصيص دالة الاسناد ******************************
         // تمكنك هذه الخصائص من احتساب قيمة جديدة بالاعتماد على حقول الجدول الموجودة مسبقا
         // هذه الخاصية تدمج الحقول الخاصة بالاسم في حقل جديد دون الحاجة لفتح حقل جديد في قاعدة البيانات
@@ -118,30 +93,21 @@ namespace NorthStorm.Models
 
         #endregion
 
-        #region Security Properties
-        // *********************************** الخواص الأمنية للحقول  *************************  // 
-        // يمكنك إستخدام مزود خدمة قواعد البيانات في توليد قيمة محسوبة للحقل، مثلا
-        // [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        // ولكن هناك بعض القيم يجب ان تحتسب بشكل يدوي عن طريق توليدها في
-        // Data\AppliationDbContext
-
-        // من المفترض ان يتم حفظ وقت وتاريخ آخر تعديل
-        // لكن يجب اعداد
-        // Trigger
-        // في قواعد البيانات
-#warning set up a trigger in database to save record update timedate
-
-        // لحفظ وقت وتاريخ انشاء القيد
-        public DateTime Created { get; set; }
-        
-        // لحفظ وقت وتاريخ تعديل القيد
-        public DateTime LastUpdated { get; set; }
-
-        // لبيان حالة القيد
-        // pending, approved, rejected
-        public State State { get; set; }
-
+        #region Foreign Keys
+        // ******************************** Foreign Keys **************************************
+        // وهي حقول المفاتيح الاساسية الخاصة بجداول اخرى
+        // إن وجود مفتاح خارجي في النموذج على الرغم من وجود خاصية التنقل تسهل عملية التعديل وتجعلها اكثر كفائة
+        // فعندما تقوم بتحميل موظف ليتم التعديل عليه، تكون قيمة خاصية التنقل للجنس غيرة معرفة ان لم تقم بتحميلها
+        // لذا عليك تحميل الحقل الخاص من جدول الجنس اولا
+        // بينما وجود المفتاح الخارجي في النموذج يمكنك من التعديل على الموظف دون تحميل كافة الحقول الخارجية
+        public int? GenderId { get; set; }          // Foreign Key
+        public int? ReligionId { get; set; }        // Foreign Key
+        public int? RaceId { get; set; }            // Foreign Key
+        public int? NationalityId { get; set; }     // Foreign Key
+        public int? StatusId { get; set; }          // Foreign Key
+        public int? RecruitmentId { get; set; }     // Foreign Key
         #endregion
+
 
         #region Navigation Properties
         // ****************************** Navigation Property خواص التنقل ******************************
@@ -152,11 +118,15 @@ namespace NorthStorm.Models
         // Many-To-Many
 
         // خاصية التنقل أدناه تثمل علاقة نوع
-        // One-To-Many
-        // فكل موظف مرتبط بأمر إداري خاص بالتعيين واحد أو أكثر
-        public ICollection<Recruitment> Recruitments{ get; set; } = new Collection<Recruitment> ();
-        public ICollection<JobTransfer> JobTransfers{ get; set; } = new Collection<JobTransfer> ();
-
+        // One-To-One
+        // فكل موظف مرتبط بأمر إداري خاص بالتعيين واحد
+        public Recruitment Recruitment { get; set; }
+        public ICollection<EmployeeJobTitle> EmployeeJobTitles { get; set; }
+        public ICollection<JobTransfer> JobTransfers { get; set; } = new Collection<JobTransfer>();
+        public ICollection<Level> Levels { get; set; } = new Collection<Level>();
+        public ICollection<Salary> Salaries { get; set; }
+        public ICollection<Certificate> Certificates { get; set; }
+        public ICollection<Promotion> Promotions { get; set; }
 
         // خاصية التنقل الخاصة بالجنس وتمثل علاقة
         // One-To-Many
@@ -187,6 +157,8 @@ namespace NorthStorm.Models
         #region Not Mapped
         [NotMapped]
         public bool IsDeleted { get; set; } = false;
+        [NotMapped]
+        public bool IsCreateAction { get; set; } = true;
         #endregion
     }
 }

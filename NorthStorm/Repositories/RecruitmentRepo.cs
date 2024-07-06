@@ -4,6 +4,7 @@ using NorthStorm.Data;
 using NorthStorm.Interfaces;
 using NorthStorm.Models;
 using NorthStorm.Models.ViewModels;
+using NorthStorm.ViewModels;
 
 namespace NorthStorm.Repositories
 {
@@ -98,6 +99,35 @@ namespace NorthStorm.Repositories
                 //_context.Entry(recruitment).State = EntityState.Modified;
                 //_context.Employees.AddRange(recruitment.Employees);
                 //await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _errors = "Update Failed - Sql Exception Occured , Error Info : " + ex.Message + ex.InnerException.Message;
+            }
+            return false;
+        }
+
+        public async Task<bool> UpdateView(Recruitment recruitment, RecruitmentVM recruitmentVM)
+        {
+            _errors = "";
+
+            try
+            {
+
+                var employeeJobTitle = new EmployeeJobTitle
+                {
+                    EmployeeId = recruitmentVM.Employee.Id,
+                    JobTitleId = recruitmentVM.JobTitleId,
+                    JobTitleAssignedDate = recruitmentVM.ReferenceDate,
+                    ReferenceNo = recruitmentVM.ReferenceNo,
+                    ReferenceDate = recruitmentVM.ReferenceDate,
+                };
+
+                _context.Recruitments.Update(recruitment);
+                _context.EmployeeJobTitles.Add(employeeJobTitle);
+                await _context.SaveChangesAsync();
 
                 return true;
             }

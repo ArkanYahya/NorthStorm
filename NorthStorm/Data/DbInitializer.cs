@@ -1,4 +1,6 @@
 ﻿using NorthStorm.Models;
+using NorthStorm.Models.Assistants;
+using NorthStorm.Models.Classifications;
 
 namespace NorthStorm.Data
 {
@@ -64,7 +66,7 @@ namespace NorthStorm.Data
             };
             foreach (Religion r in religions)
             {
-                context.Religiones.Add(r);
+                context.Religions.Add(r);
             }
             context.SaveChanges();
 
@@ -81,6 +83,37 @@ namespace NorthStorm.Data
             foreach (Status s in statuses)
             {
                 context.Statuses.Add(s);
+            }
+            context.SaveChanges();
+
+
+            var locationClassification = new LocationClassification[]
+            {
+                new LocationClassification { Name = "الدولة" },
+                new LocationClassification { Name = "المحافظة" },
+                new LocationClassification { Name = "القضاء" },
+                new LocationClassification { Name = "المنطقة" },
+                new LocationClassification { Name = "الشارع" }
+            };
+            foreach (LocationClassification s in locationClassification)
+            {
+                context.LocationClassifications.Add(s);
+            }
+            context.SaveChanges();
+
+
+            var jobTitleClassifications = new JobTitleClassification[]
+            {
+                new JobTitleClassification { Name = "طبي" },
+                new JobTitleClassification { Name = "هندسي" },
+                new JobTitleClassification { Name = "علمي" },
+                new JobTitleClassification { Name = "فني" },
+                new JobTitleClassification { Name = "إداري" },
+                new JobTitleClassification { Name = "حرفي" }
+            };
+            foreach (JobTitleClassification s in jobTitleClassifications)
+            {
+                context.JobTitleClassifications.Add(s);
             }
             context.SaveChanges();
 
@@ -147,7 +180,7 @@ namespace NorthStorm.Data
             {
                 context.Employees.Add(e);
             }
-            context.SaveChanges();
+            //context.SaveChanges();
 
 
 

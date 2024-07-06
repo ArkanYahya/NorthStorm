@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NorthStorm.Models.Assistants;
 
 namespace NorthStorm.Models.ViewModels
 {
@@ -11,10 +12,14 @@ namespace NorthStorm.Models.ViewModels
         public DateTime ReferenceDate { get; set; }
         [Required, Display(Name = "الموضوع")]
         public string Subject { get; set; }
+
         [Display(Name = "نقل من")]
-        public string TransferFrom { get; set; }
+        public int? CurrentLevelId { get; set; }
+
         [Display(Name = "نقل إلى")]
-        public string TransferTo { get; set; }
+        public int? DestinationLevelId { get; set; }
+        public Level CurrentLevel { get; set; }
+        public Level DestinationLevel { get; set; }
         public List<EmployeesInfo> Employees { get; set; } = new List<EmployeesInfo>();
     }
 

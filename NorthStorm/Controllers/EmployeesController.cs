@@ -26,7 +26,7 @@ namespace NorthStorm.Controllers
             string sortExpression = "",
             string SearchText = "",
             int pg = 1,
-            int pageSize = 5)
+            int pageSize = 10)
         {
             SortModel sortModel = new SortModel();
             sortModel.AddColumn("EmployeeId");
@@ -113,7 +113,7 @@ namespace NorthStorm.Controllers
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = "تمت إضافة الموظف " + employee.FullName + " بنجاح.";
+                    TempData["SuccessMessage"] = "تمت إضافة القيد " + employee.FullName + " بنجاح.";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -149,6 +149,8 @@ namespace NorthStorm.Controllers
                 employee.RaceId,
                 employee.ReligionId,
                 employee.StatusId);
+
+            employee.IsCreateAction = false; // To stop duplicate validation
             return View(employee);
         }
 
@@ -157,7 +159,7 @@ namespace NorthStorm.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,MiddleName,LastName,FourthName,SurName,MotherFirstName,MotherMiddleName,MotherLastName,BirthDate,CivilNumber,IBAN,GenderId,ReligionId,RaceId,NationalityId,StatusId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,MiddleName,LastName,FourthName,SurName,MotherFirstName,MotherMiddleName,MotherLastName,BirthDate,CivilNumber,IBAN,GenderId,ReligionId,RaceId,NationalityId,StatusId, IsCreateAction")] Employee employee)
         {
 #warning use DbUpdateException \ DbUpdateConcurrencyException and other exceptions for all catches
 
@@ -195,7 +197,7 @@ namespace NorthStorm.Controllers
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = "تم تحديث الموظف " + employee.FullName + " بنجاح";
+                    TempData["SuccessMessage"] = "تم تحديث القيد " + employee.FullName + " بنجاح";
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -264,7 +266,7 @@ namespace NorthStorm.Controllers
             }
             else
             {
-                TempData["SuccessMessage"] = "تم حذف الموظف " + employeeInfo + " بنجاح";
+                TempData["SuccessMessage"] = "تم حذف القيد " + employeeInfo + " بنجاح";
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -274,7 +276,8 @@ namespace NorthStorm.Controllers
             object selectedNationality = null,
             object selectedRace = null,
             object selectedReiligion = null,
-            object selectedStatus = null
+            object selectedStatus = null//,
+            //object selectedjobTitle =  null
             )
         {
             var gendersQuery = from g in _context.Genders
@@ -292,7 +295,7 @@ namespace NorthStorm.Controllers
                              select r;
             ViewBag.RaceId = new SelectList(racesQuery.AsNoTracking(), "Id", "Name", selectedRace);
 
-            var reiligionsQuery = from n in _context.Religiones
+            var reiligionsQuery = from n in _context.Religions
                                   orderby n.Name
                                   select n;
             ViewBag.ReligionId = new SelectList(reiligionsQuery.AsNoTracking(), "Id", "Name", selectedReiligion);
@@ -302,6 +305,10 @@ namespace NorthStorm.Controllers
                                 select n;
             ViewBag.StatusId = new SelectList(statusesQuery.AsNoTracking(), "Id", "Name", selectedStatus);
 
+            var jobTitlesQuery = from n in _context.JobTitles
+                                orderby n.Name
+                                select n;
+            //ViewBag.jobTitles = new SelectList(jobTitlesQuery.AsNoTracking(), "Id", "Name", selectedjobTitle);
         }
     }
 }
