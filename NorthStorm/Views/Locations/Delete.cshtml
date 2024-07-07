@@ -1,7 +1,7 @@
-﻿@model NorthStorm.Models.JobTitle
+﻿@model NorthStorm.Models.Assistants.Location
 
 @{
-    string pageTitle = "العناوين الوظيفية";
+    string pageTitle = "المواقع الجغرافية";
     ViewData["Title"] = pageTitle + " / " + "حذف قيد";
 }
 
@@ -21,8 +21,8 @@
         <div class="row col-md-12">
             <div class="row col-md-12">
                 <div class="form-group col-2 ">
-                    <label class="control-label">@Html.DisplayNameFor(model => model.ParentJobTitleId)</label>
-                    <input class="form-control" value="@Html.DisplayFor(model => model.ParentJobTitle.Name)" readonly />
+                    <label class="control-label">@Html.DisplayNameFor(model => model.ParentLocationId)</label>
+                    <input class="form-control" value="@Html.DisplayFor(model => model.ParentLocation.Name)" readonly />
                 </div>
                 <div class="form-group col-2 ">
                     <label class="control-label">@Html.DisplayNameFor(model => model.Name)</label>
@@ -33,8 +33,8 @@
                     <input class="form-control" value="@Html.DisplayFor(model => model.Classification.Name)" readonly />
                 </div>
                 <div class="form-group col-2 ">
-                    <label class="control-label">@Html.DisplayNameFor(model => model.GradeId)</label>
-                    <input class="form-control" value="@Html.DisplayFor(model => model.Grade.GradeAsWriting)" readonly />
+                    <label class="control-label">@Html.DisplayNameFor(model => model.ParentLocationId)</label>
+                    <input class="form-control" value="@Html.DisplayFor(model => model.ParentLocation.Name)" readonly />
                 </div>
                 <div class="form-group col-4">
                 </div>

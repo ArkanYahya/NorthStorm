@@ -37,7 +37,8 @@ namespace NorthStorm.Data
         public DbSet<LocationClassification> LocationClassifications { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<EmployeeJobTitle> EmployeeJobTitles { get; set; }
-
+        public DbSet<LevelClassification> LevelClassifications { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Level>()

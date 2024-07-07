@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
-using NorthStorm.Interfaces;
-using NorthStorm.Models.Assistants;
+using NorthStorm.Interfaces.Classifications;
+using NorthStorm.Models;
+using NorthStorm.Models.Classifications;
 using NorthStorm.Models.ViewModels;
 
-namespace NorthStorm.Repositories
+namespace NorthStorm.Repositories.Classifications
 {
-    public class LocationRepo : ILocation
+    public class LevelClassificationRepo : ILevelClassification
     {
         private string _errors = "";
 
@@ -15,21 +16,19 @@ namespace NorthStorm.Repositories
             return _errors;
         }
 
-
         private readonly NorthStormContext _context; // for connecting to efcore.
-        public LocationRepo(NorthStormContext context) // will be passed by dependency injection.
+        public LevelClassificationRepo(NorthStormContext context) // will be passed by dependency injection.
         {
             _context = context;
         }
 
-
-        public async Task<bool> Create(Location country)
+        public async Task<bool> Create(LevelClassification jobTitleClassification)
         {
             _errors = "";
 
             try
             {
-                _context.Locations.Add(country);
+                _context.LevelClassifications.Add(jobTitleClassification);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -40,15 +39,14 @@ namespace NorthStorm.Repositories
             return false;
         }
 
-
-        public async Task<bool> Delete(Location country)
+        public async Task<bool> Delete(LevelClassification jobTitleClassification)
         {
             _errors = "";
 
             try
             {
-                _context.Attach(country);
-                _context.Entry(country).State = EntityState.Deleted;
+                _context.Attach(jobTitleClassification);
+                _context.Entry(jobTitleClassification).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -59,15 +57,15 @@ namespace NorthStorm.Repositories
             return false;
         }
 
-
-        public async Task<bool> Edit(Location country)
+        public async Task<bool> Edit(LevelClassification jobTitleClassification)
         {
             _errors = "";
 
             try
             {
-                _context.Attach(country);
-                _context.Entry(country).State = EntityState.Modified;
+                //_context.Update(recruitment);
+                _context.Attach(jobTitleClassification);
+                _context.Entry(jobTitleClassification).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -80,7 +78,7 @@ namespace NorthStorm.Repositories
         }
 
 
-        private List<Location> DoSort(List<Location> items, string SortProperty, SortOrder sortOrder)
+        private List<LevelClassification> DoSort(List<LevelClassification> items, string SortProperty, SortOrder sortOrder)
         {
             switch (SortProperty)
             {
@@ -90,11 +88,11 @@ namespace NorthStorm.Repositories
                     else
                         items = items.OrderByDescending(n => n.Name).ToList();
                     break;
-                case "ClassificationId":
+                case "Rank":
                     if (sortOrder == SortOrder.Ascending)
-                        items = items.OrderBy(n => n.Classification.Name).ToList();
+                        items = items.OrderBy(n => n.Rank).ToList();
                     else
-                        items = items.OrderByDescending(n => n.Classification.Name).ToList();
+                        items = items.OrderByDescending(n => n.Rank).ToList();
                     break;
                 default:
                     if (sortOrder == SortOrder.Descending)
@@ -107,43 +105,37 @@ namespace NorthStorm.Repositories
             return items;
         }
 
-        public async Task<PaginatedList<Location>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
+        public async Task<PaginatedList<LevelClassification>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
         {
-            List<Location> items;
+            List<LevelClassification> items;
 
-            if (!String.IsNullOrEmpty(SearchText))
+            if (!string.IsNullOrEmpty(SearchText))
             {
-                items = await _context.Locations.Where(s =>
+                items = await _context.LevelClassifications.Where(s =>
                 s.Id.ToString().Equals(SearchText) ||
                 s.Name.Contains(SearchText))
-                    .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
                     .AsNoTracking()
                     .ToListAsync();
             }
             else
             {
-                items = await _context.Locations
-                    .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
+                items = await _context.LevelClassifications
                     .AsNoTracking()
                     .ToListAsync();
             }
 
             items = DoSort(items, SortProperty, sortOrder);
 
-            PaginatedList<Location> retItems = new PaginatedList<Location>(items, pageIndex, pageSize);
+            PaginatedList<LevelClassification> retItems = new PaginatedList<LevelClassification>(items, pageIndex, pageSize);
 
             return retItems;
         }
 
 
-        public async Task<Location> GetItem(int Id)
+        public async Task<LevelClassification> GetItem(int Id)
         {
-            Location item = await _context.Locations
-                    .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
-                    .AsNoTracking()
+            LevelClassification item = await _context.LevelClassifications
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == Id);
             return item;
         }

@@ -10,7 +10,7 @@ namespace NorthStorm.Models.ViewModels
         [Required, Display(Name = "العدد")]
         public string ReferenceNo { get; set; }
         [Required, DataType(DataType.Date), Display(Name = "التاريخ")]
-        public DateTime ReferenceDate { get; set; }
+        public DateTime ReferenceDate { get; set; }= DateTime.Now;
         [Required, Display(Name = "الموضوع")]
         public string Subject { get; set; }
         public int? DestinationLevelId { get; set; }

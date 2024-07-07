@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
 using NorthStorm.Interfaces;
+using NorthStorm.Models;
 using NorthStorm.Models.Assistants;
 using NorthStorm.Models.ViewModels;
 
 namespace NorthStorm.Repositories
 {
-    public class LocationRepo : ILocation
+    public class LevelRepo : ILevel
     {
         private string _errors = "";
 
@@ -17,19 +18,19 @@ namespace NorthStorm.Repositories
 
 
         private readonly NorthStormContext _context; // for connecting to efcore.
-        public LocationRepo(NorthStormContext context) // will be passed by dependency injection.
+        public LevelRepo(NorthStormContext context) // will be passed by dependency injection.
         {
             _context = context;
         }
 
 
-        public async Task<bool> Create(Location country)
+        public async Task<bool> Create(Level item)
         {
             _errors = "";
 
             try
             {
-                _context.Locations.Add(country);
+                _context.Levels.Add(item);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -41,14 +42,14 @@ namespace NorthStorm.Repositories
         }
 
 
-        public async Task<bool> Delete(Location country)
+        public async Task<bool> Delete(Level item)
         {
             _errors = "";
 
             try
             {
-                _context.Attach(country);
-                _context.Entry(country).State = EntityState.Deleted;
+                _context.Attach(item);
+                _context.Entry(item).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -60,14 +61,14 @@ namespace NorthStorm.Repositories
         }
 
 
-        public async Task<bool> Edit(Location country)
+        public async Task<bool> Edit(Level item)
         {
             _errors = "";
 
             try
             {
-                _context.Attach(country);
-                _context.Entry(country).State = EntityState.Modified;
+                _context.Attach(item);
+                _context.Entry(item).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -80,7 +81,7 @@ namespace NorthStorm.Repositories
         }
 
 
-        private List<Location> DoSort(List<Location> items, string SortProperty, SortOrder sortOrder)
+        private List<Level> DoSort(List<Level> items, string SortProperty, SortOrder sortOrder)
         {
             switch (SortProperty)
             {
@@ -90,11 +91,17 @@ namespace NorthStorm.Repositories
                     else
                         items = items.OrderByDescending(n => n.Name).ToList();
                     break;
+                case "ParentLevelId":
+                    if (sortOrder == SortOrder.Ascending)
+                        items = items.OrderBy(n => n.ParentLevelId).ToList();
+                    else
+                        items = items.OrderByDescending(n => n.ParentLevelId).ToList();
+                    break;
                 case "ClassificationId":
                     if (sortOrder == SortOrder.Ascending)
-                        items = items.OrderBy(n => n.Classification.Name).ToList();
+                        items = items.OrderBy(n => n.Classification.Rank).ToList();
                     else
-                        items = items.OrderByDescending(n => n.Classification.Name).ToList();
+                        items = items.OrderByDescending(n => n.Classification.Rank).ToList();
                     break;
                 default:
                     if (sortOrder == SortOrder.Descending)
@@ -107,43 +114,46 @@ namespace NorthStorm.Repositories
             return items;
         }
 
-        public async Task<PaginatedList<Location>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
+        public async Task<PaginatedList<Level>> GetItems(string SortProperty, SortOrder sortOrder, string SearchText = "", int pageIndex = 1, int pageSize = 5)
         {
-            List<Location> items;
+            List<Level> items;
 
             if (!String.IsNullOrEmpty(SearchText))
             {
-                items = await _context.Locations.Where(s =>
+                items = await _context.Levels.Where(s =>
                 s.Id.ToString().Equals(SearchText) ||
                 s.Name.Contains(SearchText))
+                    .Include(s => s.ParentLevel)
+                    .Include(s => s.Location)
                     .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
                     .AsNoTracking()
                     .ToListAsync();
             }
             else
             {
-                items = await _context.Locations
+                items = await _context.Levels
+                    .Include(s => s.ParentLevel)
+                    .Include(s => s.Location)
                     .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
                     .AsNoTracking()
                     .ToListAsync();
             }
 
             items = DoSort(items, SortProperty, sortOrder);
 
-            PaginatedList<Location> retItems = new PaginatedList<Location>(items, pageIndex, pageSize);
+            PaginatedList<Level> retItems = new PaginatedList<Level>(items, pageIndex, pageSize);
 
             return retItems;
         }
 
 
-        public async Task<Location> GetItem(int Id)
+        public async Task<Level> GetItem(int Id)
         {
-            Location item = await _context.Locations
-                    .Include(s => s.Classification)
-                    .Include(s => s.ParentLocation)
-                    .AsNoTracking()
+            Level item = await _context.Levels
+                .Include(s => s.ParentLevel)
+                .Include(s => s.Location)
+                .Include(s => s.Classification)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == Id);
             return item;
         }

@@ -29,6 +29,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGender, GenderRepo>();
 builder.Services.AddScoped<IJobTitleClassification, JobTitleClassificationRepo>();
+builder.Services.AddScoped<ILevelClassification, LevelClassificationRepo>();
 builder.Services.AddScoped<ILocationClassification, LocationClassificationRepo>();
 builder.Services.AddScoped<INationality, NationalityRepo>();
 builder.Services.AddScoped<IRace, RaceRepo>();
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IEmployee, EmployeeRepo>();
 builder.Services.AddScoped<IGrade, GradeRepo>();
 builder.Services.AddScoped<IJobTitle, JobTitleRepo>();
 builder.Services.AddScoped<IJobTransfer, JobTransferRepo>();
+builder.Services.AddScoped<ILevel, LevelRepo>();
 builder.Services.AddScoped<ILocation, LocationRepo>();
 builder.Services.AddScoped<IRecruitment, RecruitmentRepo>();
 

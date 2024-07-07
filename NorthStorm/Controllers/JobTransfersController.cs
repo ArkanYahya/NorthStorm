@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NorthStorm.Data;
 using NorthStorm.Interfaces;
 using NorthStorm.Models;
 using NorthStorm.Models.ViewModels;
-using NorthStorm.Repositories;
-using NorthStorm.Services;
-using NorthStorm.ViewModels;
+
 
 namespace NorthStorm.Controllers
 {
@@ -16,13 +13,11 @@ namespace NorthStorm.Controllers
     {
         private readonly NorthStormContext _context;
         private readonly IJobTransfer _JobTransferRepo;
-        //private readonly LevelService _levelService;
 
         public JobTransfersController(NorthStormContext context, IJobTransfer jobTransferRepo)
         {
             _context = context;
             _JobTransferRepo = jobTransferRepo;
-            //_levelService = levelService;
         }
 
         // GET: JobTransfers
@@ -81,7 +76,8 @@ namespace NorthStorm.Controllers
         public IActionResult Create()
         {
             PopulateLevelList();
-            return View();
+            var item = new JobTransferCreateViewModel();
+            return View(item);
         }
 
         // POST: JobTransfer/CreateMasterDetails

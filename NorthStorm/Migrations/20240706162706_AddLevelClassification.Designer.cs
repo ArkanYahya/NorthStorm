@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NorthStorm.Data;
 
@@ -11,9 +12,11 @@ using NorthStorm.Data;
 namespace NorthStorm.Migrations
 {
     [DbContext(typeof(NorthStormContext))]
-    partial class NorthStormContextModelSnapshot : ModelSnapshot
+    [Migration("20240706162706_AddLevelClassification")]
+    partial class AddLevelClassification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,7 +297,7 @@ namespace NorthStorm.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClassificationId")
+                    b.Property<int?>("LocationClassificationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -303,9 +306,12 @@ namespace NorthStorm.Migrations
                     b.Property<int?>("ParentLocationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassificationId");
+                    b.HasIndex("LocationClassificationId");
 
                     b.HasIndex("ParentLocationId");
 
@@ -900,15 +906,13 @@ namespace NorthStorm.Migrations
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.Location", b =>
                 {
-                    b.HasOne("NorthStorm.Models.Classifications.LocationClassification", "Classification")
+                    b.HasOne("NorthStorm.Models.Classifications.LocationClassification", null)
                         .WithMany("Locations")
-                        .HasForeignKey("ClassificationId");
+                        .HasForeignKey("LocationClassificationId");
 
                     b.HasOne("NorthStorm.Models.Assistants.Location", "ParentLocation")
                         .WithMany("ChildLocations")
                         .HasForeignKey("ParentLocationId");
-
-                    b.Navigation("Classification");
 
                     b.Navigation("ParentLocation");
                 });

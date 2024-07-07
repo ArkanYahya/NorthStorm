@@ -15,7 +15,7 @@ namespace NorthStorm.Models
         public string ReferenceNo { get; set; }
 
         [Required, DataType(DataType.Date), Display(Name = "التاريخ")]
-        public DateTime ReferenceDate { get; set; } = DateTime.Now.Date;
+        public DateTime ReferenceDate { get; set; } = DateTime.Now;
 
         [Required, Display(Name = "الموضوع")]
         public string Subject { get; set; }
