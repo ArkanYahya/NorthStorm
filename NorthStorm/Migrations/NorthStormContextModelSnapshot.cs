@@ -143,7 +143,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Certificates");
+                    b.ToTable("Certificates", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.GovernmentalInstitute", b =>
@@ -175,7 +175,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("ParentGovernmentalInstituteId");
 
-                    b.ToTable("GovernmentalInstitutes");
+                    b.ToTable("GovernmentalInstitutes", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.GovernmentalInstituteClassification", b =>
@@ -192,7 +192,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GovernmentalInstituteClassification");
+                    b.ToTable("GovernmentalInstituteClassification", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.Grade", b =>
@@ -252,7 +252,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Grades");
+                    b.ToTable("Grades", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.Level", b =>
@@ -283,7 +283,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("ParentLevelId");
 
-                    b.ToTable("Levels");
+                    b.ToTable("Levels", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.Location", b =>
@@ -309,7 +309,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("ParentLocationId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.State", b =>
@@ -326,7 +326,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("State");
+                    b.ToTable("State", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Assistants.Status", b =>
@@ -342,7 +342,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.Gender", b =>
@@ -365,7 +365,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders");
+                    b.ToTable("Genders", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.JobTitleClassification", b =>
@@ -388,7 +388,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobTitleClassifications");
+                    b.ToTable("JobTitleClassifications", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.LevelClassification", b =>
@@ -414,7 +414,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LevelClassifications");
+                    b.ToTable("LevelClassifications", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.LocationClassification", b =>
@@ -437,7 +437,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LocationClassifications");
+                    b.ToTable("LocationClassifications", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.Nationality", b =>
@@ -460,7 +460,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nationalities");
+                    b.ToTable("Nationalities", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.Race", b =>
@@ -483,7 +483,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Races");
+                    b.ToTable("Races", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Classifications.Religion", b =>
@@ -506,7 +506,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Religions");
+                    b.ToTable("Religions", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Employee", b =>
@@ -582,7 +582,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.EmployeeJobTitle", b =>
@@ -614,7 +614,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("JobTitleId");
 
-                    b.ToTable("EmployeeJobTitles");
+                    b.ToTable("EmployeeJobTitles", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.JobTitle", b =>
@@ -654,7 +654,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("ParentJobTitleId");
 
-                    b.ToTable("JobTitles");
+                    b.ToTable("JobTitles", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.JobTransfer", b =>
@@ -688,7 +688,7 @@ namespace NorthStorm.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("JobTransfers");
+                    b.ToTable("JobTransfers", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Promotion", b =>
@@ -712,7 +712,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotions", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Recruitment", b =>
@@ -736,7 +736,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recruitments");
+                    b.ToTable("Recruitments", (string)null);
                 });
 
             modelBuilder.Entity("NorthStorm.Models.Salary", b =>
@@ -752,7 +752,7 @@ namespace NorthStorm.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Salary");
+                    b.ToTable("Salary", (string)null);
                 });
 
             modelBuilder.Entity("CertificateEmployee", b =>
